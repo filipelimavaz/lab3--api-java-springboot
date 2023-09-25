@@ -55,4 +55,13 @@ public class UserService {
 
         return null;
     }
+
+    public UserDTO returnUser(String email) {
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        if(optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            return UserDTO.from(user);
+        }
+        return null;
+    }
 }
