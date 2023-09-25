@@ -7,6 +7,8 @@ import br.com.ufpb.meajude.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -48,5 +50,16 @@ public class UserService {
             return UserDTO.from(user);
         }
         return null;
+    }
+
+    public List<UserDTO> returnUserList(){
+        List<User> userList = userRepository.findAll();
+        List<UserDTO> userDTOList = new ArrayList<>();
+
+        for(User user: userList){
+            UserDTO userDTO = UserDTO.from(user);
+            userDTOList.add(userDTO);
+        }
+        return userDTOList;
     }
 }
