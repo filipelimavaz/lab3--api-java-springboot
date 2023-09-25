@@ -4,8 +4,6 @@ import br.com.ufpb.meajude.dtos.UserDTO;
 import br.com.ufpb.meajude.dtos.UserRegistrationDTO;
 import br.com.ufpb.meajude.entities.User;
 import br.com.ufpb.meajude.repositories.UserRepository;
-import org.hibernate.validator.internal.constraintvalidators.hv.br.CNPJValidator;
-import org.hibernate.validator.internal.constraintvalidators.hv.br.CPFValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

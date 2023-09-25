@@ -20,7 +20,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/sign-up")
+    @PostMapping("/sign-up")
     public ResponseEntity<UserDTO> registerUser(@RequestBody UserRegistrationDTO userRegistrationDTO) {
         return new ResponseEntity<>(userService.registerUser(userRegistrationDTO), HttpStatus.CREATED);
     }
