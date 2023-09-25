@@ -4,6 +4,7 @@ import br.com.ufpb.meajude.entities.enums.UserType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,7 @@ import java.util.List;
 @Data
 @Entity
 @NoArgsConstructor
+@Table(name = "users")
 public class User {
 
     @Id
@@ -32,7 +34,8 @@ public class User {
     @NotBlank(message = "The identity document can't be blank")
     private String identityDocument;
 
-    @NotBlank(message = "User type can't be blank")
+    @NotNull(message = "User type can't be blank")
+    @Enumerated
     private UserType userType;
 
     private String phone;
