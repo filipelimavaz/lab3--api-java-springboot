@@ -12,8 +12,8 @@ public class UserRegistrationDTO {
     private String username;
     private String email;
     private String password;
-    private String identityDocument;
     private UserType userType;
+    private String identityDocument;
     private String phone;
 
     public static UserRegistrationDTO from(User user) {
@@ -21,8 +21,8 @@ public class UserRegistrationDTO {
         userRegistrationDTO.setUsername(user.getUsername());
         userRegistrationDTO.setEmail(user.getEmail());
         userRegistrationDTO.setPassword(user.getPassword());
-        userRegistrationDTO.setIdentityDocument(user.getIdentityDocument());
         userRegistrationDTO.setUserType(user.getUserType());
+        userRegistrationDTO.setIdentityDocument(user.getIdentityDocument());
         userRegistrationDTO.setPhone(user.getPhone());
         return userRegistrationDTO;
     }
