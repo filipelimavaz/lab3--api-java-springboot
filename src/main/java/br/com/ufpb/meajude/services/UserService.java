@@ -1,30 +1,34 @@
 package br.com.ufpb.meajude.services;
 
-import br.com.caelum.stella.validation.CNPJValidator;
-import br.com.caelum.stella.validation.CPFValidator;
+import br.com.ufpb.meajude.dtos.UserDTO;
 import br.com.ufpb.meajude.dtos.UserRegistrationDTO;
 import br.com.ufpb.meajude.entities.User;
 import br.com.ufpb.meajude.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class UserService {
 
-    @Lazy
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private CPFValidator cpfValidator;
-    @Autowired
-    private CNPJValidator cnpjValidator;
 
-    public User registerUser(UserRegistrationDTO userRegistrationDTO) {
-        if(userRegistrationDTO.getUserType().equals("Person")) {
-            cpfValidator.assertValid("OK");
-        } else {
-            cnpjValidator.assertValid("OK");
+    public UserDTO registerUser(UserRegistrationDTO userRegistrationDTO) {
+        Optional<User> optionalUser = userRepository.findByEmail(userRegistrationDTO.getEmail());
+
+        if(optionalUser.isEmpty()) {
+            User user = new User();
+            user.setUsername(userRegistrationDTO.getUsername());
+            user.setEmail(userRegistrationDTO.getEmail());
+            user.setPassword(userRegistrationDTO.getPassword());
+            user.setUserType(userRegistrationDTO.getUserType());
+            user.setIdentityDocument(userRegistrationDTO.getIdentityDocument());
+            user.setPhone(userRegistrationDTO.getPhone());
+            userRepository.save(user);
+
+            return UserDTO.from(user);
         }
         return null;
     }
