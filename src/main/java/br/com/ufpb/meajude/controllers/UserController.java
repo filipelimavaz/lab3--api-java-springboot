@@ -11,17 +11,22 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.concurrent.ExecutionException;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
-    @PostMapping("/sign-up")
+    @GetMapping("/sign-up")
     public ResponseEntity<UserDTO> registerUser(@RequestBody UserRegistrationDTO userRegistrationDTO) {
         return new ResponseEntity<>(userService.registerUser(userRegistrationDTO), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{email}")
+    public ResponseEntity<UserDTO> returnUser(@PathVariable String email) {
+        return new ResponseEntity<>(userService.returnUser(email), HttpStatus.OK);
     }
 }
