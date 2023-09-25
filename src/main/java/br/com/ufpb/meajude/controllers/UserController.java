@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -20,7 +22,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/sign-up")
+    @PostMapping("/sign-up")
     public ResponseEntity<UserDTO> registerUser(@RequestBody UserRegistrationDTO userRegistrationDTO) {
         return new ResponseEntity<>(userService.registerUser(userRegistrationDTO), HttpStatus.CREATED);
     }
@@ -28,5 +30,10 @@ public class UserController {
     @GetMapping("/{email}")
     public ResponseEntity<UserDTO> returnUser(@PathVariable String email) {
         return new ResponseEntity<>(userService.returnUser(email), HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<UserDTO>> returnUserList(){
+        return new ResponseEntity<List<UserDTO>>(userService.returnUserList(), HttpStatus.OK);
     }
 }
