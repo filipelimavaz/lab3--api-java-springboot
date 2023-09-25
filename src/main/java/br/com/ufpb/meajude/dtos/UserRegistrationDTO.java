@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserRegistrationDTO {
 
+    private String username;
     private String email;
     private String password;
     private String identityDocument;
@@ -17,6 +18,7 @@ public class UserRegistrationDTO {
 
     public static UserRegistrationDTO from(User user) {
         UserRegistrationDTO userRegistrationDTO = new UserRegistrationDTO();
+        userRegistrationDTO.setUsername(user.getUsername());
         userRegistrationDTO.setEmail(user.getEmail());
         userRegistrationDTO.setPassword(user.getPassword());
         userRegistrationDTO.setIdentityDocument(user.getIdentityDocument());
