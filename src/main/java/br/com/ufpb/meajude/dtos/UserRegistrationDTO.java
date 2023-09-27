@@ -1,6 +1,7 @@
 package br.com.ufpb.meajude.dtos;
 
 import br.com.ufpb.meajude.entities.User;
+import br.com.ufpb.meajude.entities.enums.Role;
 import br.com.ufpb.meajude.entities.enums.UserType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,7 @@ public class UserRegistrationDTO {
     private UserType userType;
     private String identityDocument;
     private String phone;
+    private Role role;
 
     public static UserRegistrationDTO from(User user) {
         UserRegistrationDTO userRegistrationDTO = new UserRegistrationDTO();
@@ -24,6 +26,7 @@ public class UserRegistrationDTO {
         userRegistrationDTO.setUserType(user.getUserType());
         userRegistrationDTO.setIdentityDocument(user.getIdentityDocument());
         userRegistrationDTO.setPhone(user.getPhone());
+        userRegistrationDTO.setRole(user.getRole());
         return userRegistrationDTO;
     }
 }

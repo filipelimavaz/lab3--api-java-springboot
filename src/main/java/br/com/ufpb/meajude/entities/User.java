@@ -1,5 +1,6 @@
 package br.com.ufpb.meajude.entities;
 
+import br.com.ufpb.meajude.entities.enums.Role;
 import br.com.ufpb.meajude.entities.enums.UserType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -38,8 +39,12 @@ public class User {
     @Enumerated
     private UserType userType;
 
+    @NotNull(message = "Role can't be blank")
+    @Enumerated
+    private Role role;
+
     private String phone;
 
-    @ManyToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user")
     private List<Campaign> campaignList = new ArrayList<>();
 }

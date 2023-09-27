@@ -2,6 +2,7 @@ package br.com.ufpb.meajude.controllers;
 
 import br.com.ufpb.meajude.dtos.UserDTO;
 import br.com.ufpb.meajude.dtos.UserRegistrationDTO;
+import br.com.ufpb.meajude.dtos.UserUpdateDTO;
 import br.com.ufpb.meajude.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,5 +36,15 @@ public class UserController {
     @GetMapping
     public ResponseEntity<List<UserDTO>> returnUserList(){
         return new ResponseEntity<List<UserDTO>>(userService.returnUserList(), HttpStatus.OK);
+    }
+
+    @PatchMapping("/{email}")
+    public ResponseEntity<UserDTO> updateUser(@PathVariable String email, @RequestBody UserUpdateDTO userUpdateDTO) {
+        return new ResponseEntity<>(userService.updateUser(email, userUpdateDTO), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{email}")
+    public ResponseEntity<UserDTO> deleteUser(@PathVariable String email) {
+        return new ResponseEntity<>(userService.deleteUser(email), HttpStatus. OK);
     }
 }
