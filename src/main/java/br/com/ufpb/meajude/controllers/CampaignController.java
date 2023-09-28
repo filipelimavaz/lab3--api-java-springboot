@@ -4,7 +4,6 @@ import br.com.ufpb.meajude.dtos.campaign.CampaignDTO;
 import br.com.ufpb.meajude.dtos.campaign.CampaignRegistrationDTO;
 import br.com.ufpb.meajude.dtos.campaign.CampaignUpdateDTO;
 import br.com.ufpb.meajude.services.CampaignService;
-import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

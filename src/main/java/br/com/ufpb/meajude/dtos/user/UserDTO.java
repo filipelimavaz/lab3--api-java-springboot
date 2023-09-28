@@ -1,13 +1,10 @@
 package br.com.ufpb.meajude.dtos.user;
 
-import br.com.ufpb.meajude.entities.Campaign;
 import br.com.ufpb.meajude.entities.User;
 import br.com.ufpb.meajude.entities.enums.Role;
 import br.com.ufpb.meajude.entities.enums.UserType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @NoArgsConstructor

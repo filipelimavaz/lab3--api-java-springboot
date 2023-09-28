@@ -1,6 +1,5 @@
 package br.com.ufpb.meajude.dtos.user;
 
-import br.com.ufpb.meajude.dtos.user.UserDTO;
 import br.com.ufpb.meajude.entities.User;
 import br.com.ufpb.meajude.entities.enums.Role;
 import br.com.ufpb.meajude.entities.enums.UserType;

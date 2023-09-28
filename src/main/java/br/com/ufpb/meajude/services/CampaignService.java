@@ -3,14 +3,10 @@ package br.com.ufpb.meajude.services;
 import br.com.ufpb.meajude.dtos.campaign.CampaignDTO;
 import br.com.ufpb.meajude.dtos.campaign.CampaignRegistrationDTO;
 import br.com.ufpb.meajude.dtos.campaign.CampaignUpdateDTO;
-import br.com.ufpb.meajude.dtos.user.UserDTO;
-import br.com.ufpb.meajude.dtos.user.UserUpdateDTO;
 import br.com.ufpb.meajude.entities.Campaign;
-import br.com.ufpb.meajude.entities.User;
 import br.com.ufpb.meajude.entities.enums.CampaignStatus;
 import br.com.ufpb.meajude.repositories.CampaignRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
