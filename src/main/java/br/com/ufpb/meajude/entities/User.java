@@ -45,6 +45,8 @@ public class User {
 
     private String phone;
 
+    private boolean isDeleted;
+
     @OneToMany(mappedBy = "user")
     private List<Campaign> campaignList = new ArrayList<>();
 }

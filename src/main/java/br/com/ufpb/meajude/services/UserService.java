@@ -1,14 +1,12 @@
 package br.com.ufpb.meajude.services;
 
-import br.com.ufpb.meajude.dtos.UserDTO;
-import br.com.ufpb.meajude.dtos.UserRegistrationDTO;
-import br.com.ufpb.meajude.dtos.UserUpdateDTO;
+import br.com.ufpb.meajude.dtos.user.UserDTO;
+import br.com.ufpb.meajude.dtos.user.UserRegistrationDTO;
+import br.com.ufpb.meajude.dtos.user.UserUpdateDTO;
 import br.com.ufpb.meajude.entities.User;
 import br.com.ufpb.meajude.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,17 +18,8 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public User getUser(String email) {
-        Optional<User> optionalUser = userRepository.findByEmail(email);
-        if(optionalUser.isPresent()) {
-            return optionalUser.get();
-        } else {
-            throw new RuntimeException("Usuário não encontrado");
-        }
-    }
-
     public UserDTO registerUser(UserRegistrationDTO userRegistrationDTO) {
-        Optional<User> optionalUser = userRepository.findByEmail(userRegistrationDTO.getEmail());
+        Optional<User> optionalUser = userRepository.findActiveUserByEmail(userRegistrationDTO.getEmail());
         if(optionalUser.isEmpty()) {
             User user = new User();
             user.setUsername(userRegistrationDTO.getUsername());
@@ -40,6 +29,7 @@ public class UserService {
             user.setIdentityDocument(userRegistrationDTO.getIdentityDocument());
             user.setPhone(userRegistrationDTO.getPhone());
             user.setRole(userRegistrationDTO.getRole());
+            user.setDeleted(false);
             userRepository.save(user);
 
             return UserDTO.from(user);
@@ -48,7 +38,7 @@ public class UserService {
     }
 
     public UserDTO returnUser(String email) {
-        Optional<User> optionalUser = userRepository.findByEmail(email);
+        Optional<User> optionalUser = userRepository.findActiveUserByEmail(email);
         if(optionalUser.isPresent()) {
             User user = optionalUser.get();
             return UserDTO.from(user);
@@ -57,7 +47,7 @@ public class UserService {
     }
 
     public List<UserDTO> returnUserList(){
-        List<User> userList = userRepository.findAll();
+        List<User> userList = userRepository.findAllActiveUsers();
         List<UserDTO> userDTOList = new ArrayList<>();
 
         for(User user: userList){
@@ -68,7 +58,7 @@ public class UserService {
     }
 
     public UserDTO updateUser(String email, UserUpdateDTO userUpdateDTO) {
-        Optional<User> optionalUser = userRepository.findByEmail(email);
+        Optional<User> optionalUser = userRepository.findActiveUserByEmail(email);
 
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
@@ -79,16 +69,15 @@ public class UserService {
             return updatedUserDTO;
         }
         return null;
-
     }
 
     public UserDTO deleteUser(String email) {
-        Optional<User> optionalUser = userRepository.findByEmail(email);
+        Optional<User> optionalUser = userRepository.findActiveUserByEmail(email);
 
         if(optionalUser.isPresent()) {
             User user = optionalUser.get();
-
-            userRepository.delete(user);
+            user.setDeleted(true);
+            userRepository.save(user);
             return UserDTO.from(user);
         }
         return UserDTO.from(optionalUser.get());

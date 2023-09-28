@@ -1,8 +1,8 @@
 package br.com.ufpb.meajude.controllers;
 
-import br.com.ufpb.meajude.dtos.UserDTO;
-import br.com.ufpb.meajude.dtos.UserRegistrationDTO;
-import br.com.ufpb.meajude.dtos.UserUpdateDTO;
+import br.com.ufpb.meajude.dtos.user.UserDTO;
+import br.com.ufpb.meajude.dtos.user.UserRegistrationDTO;
+import br.com.ufpb.meajude.dtos.user.UserUpdateDTO;
 import br.com.ufpb.meajude.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
