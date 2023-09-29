@@ -28,13 +28,12 @@ public class CampaignService {
             Campaign campaign = new Campaign();
             campaign.setTitle(campaignRegistrationDTO.getTitle());
             campaign.setDescription(campaignRegistrationDTO.getDescription());
-            campaign.setDonationAmount(BigDecimal.valueOf(0));
+            campaign.setDonationAmount(new BigDecimal(0));
             campaign.setGoal(campaignRegistrationDTO.getGoal());
             campaign.setStartDate(campaignRegistrationDTO.getStartDate());
             campaign.setEndDate(campaignRegistrationDTO.getEndDate());
 
-            LocalDate currentLocalDate = LocalDate.now();
-            Date currentDate = Date.from(currentLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            Date currentDate = Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
 
             if(campaign.getStartDate().after(currentDate)) {
                 campaign.setStatus(CampaignStatus.NOT_STARTED);
@@ -43,8 +42,6 @@ public class CampaignService {
             }
             campaignRepository.save(campaign);
             return CampaignDTO.from(campaign);
-
-
     }
 
     //Retorna campanhas por ID
@@ -63,13 +60,14 @@ public class CampaignService {
         List<Campaign> campaignList = campaignRepository.findActiveCampaigns();
         List<CampaignDTO> campaignDTOList = new ArrayList<>();
 
-        if(campaignList.isEmpty()) {
+        if(!campaignList.isEmpty()) {
             for(Campaign c : campaignList) {
                 CampaignDTO campaignDTO = CampaignDTO.from(c);
                 campaignDTOList.add(campaignDTO);
             }
+            return campaignDTOList;
         }
-        return campaignDTOList;
+        return null;
     }
 
     //Retorna todas campanhas EM BREVE

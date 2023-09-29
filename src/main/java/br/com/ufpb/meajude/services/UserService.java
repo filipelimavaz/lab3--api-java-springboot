@@ -50,11 +50,14 @@ public class UserService {
         List<User> userList = userRepository.findAllActiveUsers();
         List<UserDTO> userDTOList = new ArrayList<>();
 
-        for(User user: userList){
-            UserDTO userDTO = UserDTO.from(user);
-            userDTOList.add(userDTO);
+        if(!userList.isEmpty()) {
+            for(User user: userList){
+                UserDTO userDTO = UserDTO.from(user);
+                userDTOList.add(userDTO);
+            }
+            return userDTOList;
         }
-        return userDTOList;
+        return null;
     }
 
     public UserDTO updateUser(String email, UserUpdateDTO userUpdateDTO) {

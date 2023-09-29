@@ -49,4 +49,7 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Campaign> campaignList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Donation> donationList = new ArrayList<>();
 }
