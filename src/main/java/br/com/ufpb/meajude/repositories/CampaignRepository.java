@@ -24,4 +24,6 @@ public interface CampaignRepository extends JpaRepository<Campaign, String> {
 
     @Query("SELECT c FROM Campaign c WHERE c.status = 0")
     List<Campaign> findUpcomingCampaigns();
+
+    List<Campaign> findByUserId(String userId);
 }

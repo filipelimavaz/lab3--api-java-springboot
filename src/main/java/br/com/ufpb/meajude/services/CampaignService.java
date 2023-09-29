@@ -75,13 +75,14 @@ public class CampaignService {
         List<Campaign> campaignList = campaignRepository.findUpcomingCampaigns();
         List<CampaignDTO> campaignDTOList = new ArrayList<>();
 
-        if(campaignList.isEmpty()) {
+        if(!campaignList.isEmpty()) {
             for(Campaign c : campaignList) {
                 CampaignDTO campaignDTO = CampaignDTO.from(c);
                 campaignDTOList.add(campaignDTO);
             }
+            return campaignDTOList;
         }
-        return campaignDTOList;
+        return null;
     }
 
     //Retorna todas campanhas ENCERRADAS
@@ -89,13 +90,29 @@ public class CampaignService {
         List<Campaign> campaignList = campaignRepository.findClosedCampaigns();
         List<CampaignDTO> campaignDTOList = new ArrayList<>();
 
-        if(campaignList.isEmpty()) {
+        if(!campaignList.isEmpty()) {
             for(Campaign c : campaignList) {
                 CampaignDTO campaignDTO = CampaignDTO.from(c);
                 campaignDTOList.add(campaignDTO);
             }
+            return campaignDTOList;
         }
-        return campaignDTOList;
+        return null;
+    }
+
+    //Retorna todas campanhas do USUÁRIO
+    public List<CampaignDTO> returnAllUserCampaignList(String id) {
+        List<Campaign> campaignList = campaignRepository.findByUserId(id);
+        List<CampaignDTO> campaignDTOList = new ArrayList<>();
+
+        if(!campaignList.isEmpty()) {
+            for(Campaign c : campaignList) {
+                CampaignDTO campaignDTO = CampaignDTO.from(c);
+                campaignDTOList.add(campaignDTO);
+            }
+            return campaignDTOList;
+        }
+        return null;
     }
 
     //Retorna TODAS campanhas
@@ -103,13 +120,14 @@ public class CampaignService {
         List<Campaign> campaignList = campaignRepository.findAll();
         List<CampaignDTO> campaignDTOList = new ArrayList<>();
 
-        if(campaignList.isEmpty()) {
+        if(!campaignList.isEmpty()) {
             for(Campaign c : campaignList) {
                 CampaignDTO campaignDTO = CampaignDTO.from(c);
                 campaignDTOList.add(campaignDTO);
             }
+            return campaignDTOList;
         }
-        return campaignDTOList;
+        return null;
     }
 
     public CampaignDTO updateCampaign(String id, CampaignUpdateDTO campaignUpdateDTO) {

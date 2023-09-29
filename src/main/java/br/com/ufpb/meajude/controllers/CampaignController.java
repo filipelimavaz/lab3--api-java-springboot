@@ -43,6 +43,11 @@ public class CampaignController {
         return new ResponseEntity<>(campaignService.returnClosedCampaignList(), HttpStatus.OK);
     }
 
+    @GetMapping("/user/{id}")
+    public ResponseEntity<List<CampaignDTO>> returnAllUserCampaignList(@PathVariable String id) {
+        return new ResponseEntity<>(campaignService.returnAllUserCampaignList(id), HttpStatus.OK);
+    }
+
     @GetMapping("/all")
     public ResponseEntity<List<CampaignDTO>> returnAllCampaignList() {
         return new ResponseEntity<>(campaignService.returnAllCampaignList(), HttpStatus.OK);
