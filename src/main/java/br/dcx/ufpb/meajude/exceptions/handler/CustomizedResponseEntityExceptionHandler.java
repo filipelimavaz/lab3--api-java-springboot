@@ -1,6 +1,5 @@
 package br.dcx.ufpb.meajude.exceptions.handler;
 
-import br.com.ufpb.meajude.exceptions.*;
 import br.dcx.ufpb.meajude.dtos.errors.ErrorDetailsDTO;
 import br.dcx.ufpb.meajude.exceptions.*;
 import jakarta.validation.ConstraintViolation;
