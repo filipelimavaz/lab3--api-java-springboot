@@ -31,6 +31,7 @@ public class CampaignDTO {
         campaignDTO.setStartDate(campaign.getStartDate());
         campaignDTO.setEndDate(campaign.getEndDate());
         campaignDTO.setUsername(campaign.getUser().getUsername());
+
         return campaignDTO;
     }
 }
