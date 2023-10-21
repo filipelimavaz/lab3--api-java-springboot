@@ -1,0 +1,23 @@
+package br.com.ufpb.meajude.exceptions;
+
+import br.com.ufpb.meajude.entities.Campaign;
+import jakarta.validation.ConstraintViolation;
+
+import java.util.Objects;
+import java.util.Set;
+
+public class CustomValidationException extends AbstractException {
+    private Set<ConstraintViolation<Object>> violations;
+
+    public CustomValidationException(String title, Set<ConstraintViolation<Object>> violations) {
+        super(title, "One or more fields have validation errors");
+        this.violations = violations;
+    }
+
+    public Set<ConstraintViolation<Object>> getViolations() {
+        return violations;
+    }
+}
+
+
+

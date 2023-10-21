@@ -19,7 +19,7 @@ public class CampaignController {
     private CampaignService campaignService;
 
     @PostMapping("/create")
-    public ResponseEntity<CampaignDTO> createCampaign(@RequestBody CampaignRegistrationDTO campaignRegistrationDTO) {
+    public ResponseEntity<CampaignDTO> createCampaign(@RequestBody CampaignRegistrationDTO campaignRegistrationDTO, @RequestHeader("Authorization") String header) {
         return new ResponseEntity<>(campaignService.createCampaign(campaignRegistrationDTO), HttpStatus.CREATED);
     }
 
@@ -30,6 +30,16 @@ public class CampaignController {
 
     @GetMapping("/active")
     public ResponseEntity<List<CampaignDTO>> returnActiveCampaignList() {
+        return new ResponseEntity<>(campaignService.returnActiveCampaignList(), HttpStatus.OK);
+    }
+
+    @GetMapping("/active_by_creationDate")
+    public ResponseEntity<List<CampaignDTO>> returnActiveCampaignsOrderedByCreationDate() {
+        return new ResponseEntity<>(campaignService.returnActiveCampaignsOrderedByCreationDate(), HttpStatus.OK);
+    }
+
+    @GetMapping("/closed_by_creationDate")
+    public ResponseEntity<List<CampaignDTO>> returnClosedCampaignsOrderedByCreationDate() {
         return new ResponseEntity<>(campaignService.returnActiveCampaignList(), HttpStatus.OK);
     }
 
@@ -54,12 +64,17 @@ public class CampaignController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<CampaignDTO> updateCampaign(@PathVariable String id, @RequestBody CampaignUpdateDTO campaignUpdateDTO) {
+    public ResponseEntity<CampaignDTO> updateCampaign(@PathVariable String id, @RequestBody CampaignUpdateDTO campaignUpdateDTO, @RequestHeader("Authorization") String header) {
         return new ResponseEntity<>(campaignService.updateCampaign(id, campaignUpdateDTO), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<CampaignDTO> closeCampaign(@PathVariable String id) {
+    @PatchMapping("/{id}")
+    public ResponseEntity<CampaignDTO> closeCampaign(@PathVariable String id, @RequestHeader("Authorization") String header) {
         return new ResponseEntity<>(campaignService.closeCampaign(id), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<CampaignDTO> deleteCampaign(@PathVariable String id, @RequestHeader("Authorization") String header) {
+        return new ResponseEntity<>(campaignService.deleteCampaign(id), HttpStatus.OK);
     }
 }

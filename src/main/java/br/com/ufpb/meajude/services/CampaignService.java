@@ -5,17 +5,21 @@ import br.com.ufpb.meajude.dtos.campaign.CampaignRegistrationDTO;
 import br.com.ufpb.meajude.dtos.campaign.CampaignUpdateDTO;
 import br.com.ufpb.meajude.entities.Campaign;
 import br.com.ufpb.meajude.entities.enums.CampaignStatus;
+import br.com.ufpb.meajude.exceptions.*;
 import br.com.ufpb.meajude.repositories.CampaignRepository;
+import br.com.ufpb.meajude.repositories.UserRepository;
+import jakarta.transaction.Transactional;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class CampaignService {
@@ -23,36 +27,66 @@ public class CampaignService {
     @Autowired
     private CampaignRepository campaignRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private AuthorizationService authorizationService;
+
+    @Autowired
+    private LocalValidatorFactoryBean localValidatorFactoryBean;
+
+    @Autowired
+    private Validator validator;
+
+    @Transactional
     public CampaignDTO createCampaign(CampaignRegistrationDTO campaignRegistrationDTO) {
+        if(!authorizationService.isUserLoggedIn()) {
+            throw new InvalidRequestException("Invalid Resquest",
+                    "You must be logged in to create a campaign.");
+        }
 
-            Campaign campaign = new Campaign();
-            campaign.setTitle(campaignRegistrationDTO.getTitle());
-            campaign.setDescription(campaignRegistrationDTO.getDescription());
-            campaign.setDonationAmount(new BigDecimal(0));
-            campaign.setGoal(campaignRegistrationDTO.getGoal());
-            campaign.setStartDate(campaignRegistrationDTO.getStartDate());
-            campaign.setEndDate(campaignRegistrationDTO.getEndDate());
+        Date currentDate = Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Campaign campaign = new Campaign();
+        campaign.setTitle(campaignRegistrationDTO.getTitle());
+        campaign.setDescription(campaignRegistrationDTO.getDescription());
+        campaign.setDonationAmount(new BigDecimal(0));
+        campaign.setGoal(campaignRegistrationDTO.getGoal());
+        campaign.setStartDate(campaignRegistrationDTO.getStartDate());
+        campaign.setEndDate(campaignRegistrationDTO.getEndDate());
+        campaign.setCreationDate(currentDate);
+        campaign.setUser(authorizationService.getLoggedUser());
 
-            Date currentDate = Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        if(campaign.getStartDate().after(currentDate)) {
+            campaign.setStatus(CampaignStatus.NOT_STARTED);
+        } else {
+            campaign.setStatus(CampaignStatus.ACTIVE);
+        }
 
-            if(campaign.getStartDate().after(currentDate)) {
-                campaign.setStatus(CampaignStatus.NOT_STARTED);
-            } else {
-                campaign.setStatus(CampaignStatus.ACTIVE);
-            }
-            campaignRepository.save(campaign);
-            return CampaignDTO.from(campaign);
+        if(campaign.getStartDate().after(campaign.getEndDate())) {
+            throw new InvalidFieldException("Campaign can't be created: Invalid date range",
+                    "Please verify the start date. The start date cannot be later than the end date.");
+        }
+
+        Set<ConstraintViolation<Object>> violations = validator.validate(campaign);
+        if (!violations.isEmpty()) {
+            throw new CustomValidationException("One or more fields have validation errors", violations);
+        }
+
+        campaignRepository.save(campaign);
+        return CampaignDTO.from(campaign);
     }
 
     //Retorna campanhas por ID
     public CampaignDTO returnCampaign(String id) {
-        Optional<Campaign> optionalCampaign = campaignRepository.findById(id);
+        Optional<Campaign> optionalCampaign = campaignRepository.findById(Long.parseLong(id));
 
         if(optionalCampaign.isPresent()) {
             Campaign campaign = optionalCampaign.get();
             return CampaignDTO.from(campaign);
         }
-        return null;
+        throw new NotFoundException("Campaign not found",
+                "Please verify if the campaign id is correct or if it's campaign is registered on the platform.");
     }
 
     //Retorna todas campanhas ATIVAS
@@ -67,7 +101,67 @@ public class CampaignService {
             }
             return campaignDTOList;
         }
-        return null;
+        return null; //EXCEÇÃO PARA CASO NENHUMA CAMPANHA NÃO SEJA ENCONTRADA
+    }
+
+    //Retorna todas campanhas ATIVAS ordenadas pela DATA DE CRIAÇÃO
+    public List<CampaignDTO> returnActiveCampaignsOrderedByCreationDate() {
+        List<Campaign> campaignList = campaignRepository.findActiveCampaignsOrderedByCreationDate();
+        List<CampaignDTO> campaignDTOList = new ArrayList<>();
+
+        if(!campaignList.isEmpty()) {
+            for(Campaign c : campaignList) {
+                CampaignDTO campaignDTO = CampaignDTO.from(c);
+                campaignDTOList.add(campaignDTO);
+            }
+            return campaignDTOList;
+        }
+        return null; //EXCEÇÃO PARA CASO NENHUMA CAMPANHA NÃO SEJA ENCONTRADA
+    }
+
+    //Retorna todas campanhas ENCERRADAS ordenadas pela DATA DE CRIAÇÃO
+    public List<CampaignDTO> returnClosedCampaignsOrderedByCreationDate() {
+        List<Campaign> campaignList = campaignRepository.findClosedCampaignsOrderedByCreationDate();
+        List<CampaignDTO> campaignDTOList = new ArrayList<>();
+
+        if(!campaignList.isEmpty()) {
+            for(Campaign c : campaignList) {
+                CampaignDTO campaignDTO = CampaignDTO.from(c);
+                campaignDTOList.add(campaignDTO);
+            }
+            return campaignDTOList;
+        }
+        return null; //EXCEÇÃO PARA CASO NENHUMA CAMPANHA NÃO SEJA ENCONTRADA
+    }
+
+    //Retorna todas as campanhas ATIVAS que atingiram a META
+    public List<CampaignDTO> returnActiveCampaignsReachedGoal() {
+        List<Campaign> campaignList = campaignRepository.findActiveCampaignsReachedGoal();
+        List<CampaignDTO> campaignDTOList = new ArrayList<>();
+
+        if(!campaignList.isEmpty()) {
+            for(Campaign c : campaignList) {
+                CampaignDTO campaignDTO = CampaignDTO.from(c);
+                campaignDTOList.add(campaignDTO);
+            }
+            return campaignDTOList;
+        }
+        return null; //EXCEÇÃO PARA CASO NENHUMA CAMPANHA NÃO SEJA ENCONTRADA
+    }
+
+    //Retorna todas as campanhas ENCERRADAS que atingiram a META
+    public List<CampaignDTO> returnClosedCampaignsReachedGoal() {
+        List<Campaign> campaignList = campaignRepository.findClosedCampaignsReachedGoal();
+        List<CampaignDTO> campaignDTOList = new ArrayList<>();
+
+        if(!campaignList.isEmpty()) {
+            for(Campaign c : campaignList) {
+                CampaignDTO campaignDTO = CampaignDTO.from(c);
+                campaignDTOList.add(campaignDTO);
+            }
+            return campaignDTOList;
+        }
+        return null; //EXCEÇÃO PARA CASO NENHUMA CAMPANHA NÃO SEJA ENCONTRADA
     }
 
     //Retorna todas campanhas EM BREVE
@@ -82,7 +176,7 @@ public class CampaignService {
             }
             return campaignDTOList;
         }
-        return null;
+        return null; //EXCEÇÃO PARA CASO NENHUMA CAMPANHA NÃO SEJA ENCONTRADA
     }
 
     //Retorna todas campanhas ENCERRADAS
@@ -97,12 +191,12 @@ public class CampaignService {
             }
             return campaignDTOList;
         }
-        return null;
+        return null; //EXCEÇÃO PARA CASO NENHUMA CAMPANHA NÃO SEJA ENCONTRADA
     }
 
     //Retorna todas campanhas do USUÁRIO
     public List<CampaignDTO> returnAllUserCampaignList(String id) {
-        List<Campaign> campaignList = campaignRepository.findByUserId(id);
+        List<Campaign> campaignList = campaignRepository.findByUserId(Long.parseLong(id));
         List<CampaignDTO> campaignDTOList = new ArrayList<>();
 
         if(!campaignList.isEmpty()) {
@@ -112,7 +206,7 @@ public class CampaignService {
             }
             return campaignDTOList;
         }
-        return null;
+        return null; //EXCEÇÃO PARA CASO NENHUMA CAMPANHA NÃO SEJA ENCONTRADA
     }
 
     //Retorna TODAS campanhas
@@ -127,29 +221,83 @@ public class CampaignService {
             }
             return campaignDTOList;
         }
-        return null;
+        return null; //EXCEÇÃO PARA CASO NENHUMA CAMPANHA NÃO SEJA ENCONTRADA
     }
 
     public CampaignDTO updateCampaign(String id, CampaignUpdateDTO campaignUpdateDTO) {
-        Optional<Campaign> optionalCampaign = campaignRepository.findById(id); //TROCAR PARA FINDBYACTIVEID DEPOIS
+        if(!authorizationService.isUserLoggedIn()) {
+            throw new InvalidRequestException("Invalid Resquest",
+                    "You must be logged in to create a campaign.");
+        }
+        Optional<Campaign> optionalCampaign = campaignRepository.findActiveCampaignById(Long.parseLong(id));
+        Date currentDate = Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
 
         if (optionalCampaign.isPresent()) {
             Campaign campaign = optionalCampaign.get();
-            campaignUpdateDTO.update(campaign);
-            campaignRepository.save(campaign);
-            return CampaignDTO.from(campaign);
-        }
-        return null;
+                if(campaign.getEndDate().after(currentDate) || campaign.getUser().equals(authorizationService.getLoggedUser())) {
+                    campaignUpdateDTO.update(campaign);
+
+                    Set<ConstraintViolation<Campaign>> violations = localValidatorFactoryBean.validate(campaign);
+                    if (violations.isEmpty()) {
+                        campaignRepository.save(campaign);
+                        return CampaignDTO.from(campaign);
+                    } else {
+                        return null; //NÃO FOI POSSÍVEL ATUALIZAR A CAMPANHA POIS UM DOS ATRIBUTOS FOI VIOLADO
+                    }
+                } else {
+                    throw new InvalidRequestException("Invalid Resquest",
+                            "The required operation cannot be performed because the final campaign deadline has not been reached" +
+                            "or the logged in user is not the owner of the campaign.");
+                }
+            }
+        throw new NotFoundException("Campaign not found",
+                "Please verify if the campaign id is correct or if it's campaign is registered on the platform.");
     }
 
     public CampaignDTO closeCampaign(String id) {
-        Optional<Campaign> optionalCampaign = campaignRepository.findById(id); //TROCAR PARA FINDBYACTIVEID DEPOIS
+        if(!authorizationService.isUserLoggedIn()) {
+            throw new InvalidRequestException("Invalid Resquest",
+                    "You must be logged in to create a campaign.");
+        }
+
+        Optional<Campaign> optionalCampaign = campaignRepository.findActiveCampaignById(Long.parseLong(id));
+        if (optionalCampaign.isPresent()) {
+            Campaign campaign = optionalCampaign.get();
+            if(campaign.getUser().equals(authorizationService.getLoggedUser())) {
+                campaign.setStatus(CampaignStatus.CLOSED);
+                return CampaignDTO.from(campaign);
+            } else {
+                throw new InvalidRequestException("Invalid Resquest",
+                        "The campaign only be finished by his owner.");
+            }
+        }
+        throw new NotFoundException("Campaign not found",
+                "Please verify if the campaign id is correct or if it's campaign is registered on the platform.");
+    }
+    public CampaignDTO deleteCampaign(String id) {
+        if(!authorizationService.isUserLoggedIn()) {
+            throw new InvalidRequestException("Invalid Resquest",
+                    "You must be logged in to create a campaign.");
+        }
+
+        Optional<Campaign> optionalCampaign = campaignRepository.findActiveCampaignById(Long.parseLong(id));
+        UserDetails userDetails = userRepository.findByEmail(authorizationService.getLoggedUser().getEmail());
+
         if(optionalCampaign.isPresent()) {
             Campaign campaign = optionalCampaign.get();
-            campaign.setStatus(CampaignStatus.CLOSED);
-            campaignRepository.save(campaign);
-            return CampaignDTO.from(campaign);
+            if(campaign.getUser().equals(authorizationService.getLoggedUser()) || userDetails.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+                if(campaign.getDonations().isEmpty()) {
+                    campaignRepository.delete(campaign);
+                } else {
+                    campaign.setStatus(CampaignStatus.CLOSED);
+                    campaignRepository.save(campaign);
+                }
+                return CampaignDTO.from(campaign);
+            }
+            throw new UnauthorizedException("User does not have permission",
+                    "The required operation cannot be performed by this user");
         }
-        return null;
+        throw new NotFoundException("Campaign not found",
+                "Please verify if the campaign id is correct or if it's campaign is registered on the platform.");
     }
 }

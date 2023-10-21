@@ -19,6 +19,7 @@ public class CampaignDTO {
     private BigDecimal goal;
     private Date startDate;
     private Date endDate;
+    private String username;
 
     public static CampaignDTO from(Campaign campaign) {
         CampaignDTO campaignDTO = new CampaignDTO();
@@ -29,6 +30,7 @@ public class CampaignDTO {
         campaignDTO.setGoal(campaign.getGoal());
         campaignDTO.setStartDate(campaign.getStartDate());
         campaignDTO.setEndDate(campaign.getEndDate());
+        campaignDTO.setUsername(campaign.getUser().getUsername());
         return campaignDTO;
     }
 }

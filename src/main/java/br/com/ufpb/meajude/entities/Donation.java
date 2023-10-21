@@ -1,8 +1,6 @@
 package br.com.ufpb.meajude.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Future;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
@@ -33,7 +31,6 @@ public class Donation {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @NotBlank(message = "Donation date can't be blank")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date donationDate;
 }

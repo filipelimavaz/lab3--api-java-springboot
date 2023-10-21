@@ -1,6 +1,7 @@
 package br.com.ufpb.meajude.dtos.campaign;
 
 import br.com.ufpb.meajude.entities.Campaign;
+import br.com.ufpb.meajude.entities.enums.CampaignStatus;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -37,6 +38,9 @@ public class CampaignUpdateDTO {
                 return campaign;
             case "endDate":
                 campaign.setEndDate(Date.valueOf(this.updateInformation));
+                return campaign;
+            case "status":
+                campaign.setStatus(CampaignStatus.valueOf(this.updateInformation));
                 return campaign;
             default:
                 return null;

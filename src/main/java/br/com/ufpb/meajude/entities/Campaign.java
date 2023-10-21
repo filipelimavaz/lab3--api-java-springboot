@@ -4,11 +4,14 @@ import br.com.ufpb.meajude.entities.enums.CampaignStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Entity
@@ -29,8 +32,6 @@ public class Campaign {
     @Size(max = 1000, message = "Description length must not exceed 1000 characters")
     private String description;
 
-    @NotNull(message = "Donation amount can't be null")
-    @Positive(message = "The donation amount must be greater than zero")
     private BigDecimal donationAmount;
 
     @NotNull(message = "Goal can't be null")
@@ -41,15 +42,21 @@ public class Campaign {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @NotBlank(message = "Start date can't be blank")
+    @NotNull(message = "Start date can't be null")
     @Future(message = "The end date must be in the present or in the future")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date startDate;
 
-    @NotBlank(message = "End date can't be blank")
+    @NotNull(message = "End date can't be null")
     @Future(message = "The end date must be in the future")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date endDate;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date creationDate;
+
+    @OneToMany(mappedBy = "campaign", cascade = CascadeType.ALL)
+    private List<Donation> donations;
 
     public void setDonationAmount(BigDecimal value) {
         if (this.donationAmount == null) {
@@ -58,5 +65,4 @@ public class Campaign {
             this.donationAmount = this.donationAmount.add(value);
         }
     }
-
 }
