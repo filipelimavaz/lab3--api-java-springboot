@@ -1,6 +1,7 @@
 package br.dcx.ufpb.meajude.dtos.campaign;
 
 import br.dcx.ufpb.meajude.entities.Campaign;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

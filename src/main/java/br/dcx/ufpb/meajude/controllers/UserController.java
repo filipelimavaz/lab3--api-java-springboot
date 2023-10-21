@@ -34,7 +34,6 @@ public class UserController {
         return new ResponseEntity<List<UserDTO>>(userService.returnUserList(), HttpStatus.OK);
     }
 
-    @PreAuthorize("authentication.email == #email")
     @PatchMapping("/{email}")
     public ResponseEntity<UserDTO> updateUser(@PathVariable String email, @RequestBody UserUpdateDTO userUpdateDTO, @RequestHeader("Authorization") String header) {
         return new ResponseEntity<>(userService.updateUser(email, userUpdateDTO), HttpStatus.OK);
