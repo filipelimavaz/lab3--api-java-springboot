@@ -1,14 +1,13 @@
 package br.dcx.ufpb.meajude.services;
 
 import br.dcx.ufpb.meajude.dtos.user.UserDTO;
-import br.dcx.ufpb.meajude.dtos.user.UserRegistrationDTO;
 import br.dcx.ufpb.meajude.dtos.user.UserUpdateDTO;
 import br.dcx.ufpb.meajude.entities.User;
-import br.dcx.ufpb.meajude.entities.enums.Role;
+import br.dcx.ufpb.meajude.exceptions.InvalidRequestException;
+import br.dcx.ufpb.meajude.exceptions.NotFoundException;
 import br.dcx.ufpb.meajude.exceptions.UnauthorizedException;
 import br.dcx.ufpb.meajude.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -49,31 +48,47 @@ public class UserService {
     }
 
     public UserDTO updateUser(String email, UserUpdateDTO userUpdateDTO) {
+        if(!authorizationService.isUserLoggedIn()) {
+            throw new InvalidRequestException("Invalid Resquest",
+                    "You must be logged in to do an user update");
+        }
+
         Optional<User> optionalUser = userRepository.findActiveUserByEmail(email);
+        String userEmail = authorizationService.getLoggedUser().getEmail();
 
         if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            userUpdateDTO.update(user);
-            userRepository.save(user);
-            UserDTO updatedUserDTO = UserDTO.from(user);
-            userRepository.save(user);
-            return updatedUserDTO;
+            if (userEmail.equals(email)) {
+                User user = optionalUser.get();
+                userUpdateDTO.update(user);
+                userRepository.save(user);
+                return UserDTO.from(user);
+            } else {
+                throw new UnauthorizedException("User does not have permission",
+                        "The required operation cannot be performed by this user");
+            }
         }
-        return null;
+        throw new NotFoundException("User was not found",
+                "Please verify if the entered email is correct or if it is registered on the platform.");
     }
 
     public UserDTO deleteUser(String email) {
         Optional<User> optionalUser = userRepository.findActiveUserByEmail(email);
+        String userEmail = authorizationService.getLoggedUser().getEmail();
+        UserDetails userDetails = userRepository.findByEmail(userEmail);
 
         if (optionalUser.isPresent()) {
-            if (optionalUser.get().getEmail().equals(email)) {
+            if (userEmail.equals(email) || userDetails.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
                 System.out.println("if");
                 User user = optionalUser.get();
                 user.setDeleted(true);
                 userRepository.delete(user);
                 return UserDTO.from(user);
+            } else {
+                throw new UnauthorizedException("User does not have permission",
+                        "The required operation cannot be performed by this user");
             }
         }
-        return null;
+        throw new NotFoundException("User was not found",
+                "Please verify if the entered email is correct or if it is registered on the platform.");
     }
 }

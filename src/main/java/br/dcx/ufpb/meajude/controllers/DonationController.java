@@ -18,7 +18,7 @@ public class DonationController {
     private DonationService donationService;
 
     @PatchMapping
-    public ResponseEntity<DonationDTO> donationGiver(@RequestBody DonationGiverDTO donationGiverDTO) {
+    public ResponseEntity<DonationDTO> donationGiver(@RequestBody DonationGiverDTO donationGiverDTO, @RequestHeader("Authorization") String header) {
         return new ResponseEntity<>(donationService.donationGiver(donationGiverDTO), HttpStatus.OK);
     }
 

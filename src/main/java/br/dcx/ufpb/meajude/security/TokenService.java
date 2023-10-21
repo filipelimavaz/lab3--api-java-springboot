@@ -11,19 +11,22 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Date;
 
 @Service
 public class TokenService {
+
     @Value("${api.security.token.secret}")
     private String secret;
 
-    public String generateToken(User user){
-        try{
+    public String generateToken(User user) {
+        try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
+            Date expirationDate = new Date(System.currentTimeMillis() + 5 * 60 * 1000); // 5 minutos de expiração
             String token = JWT.create()
                     .withIssuer("meAjude-api")
                     .withSubject(user.getEmail())
-                    .withExpiresAt(genExpirationDate())
+                    .withExpiresAt(expirationDate)
                     .sign(algorithm);
             return token;
         } catch (JWTCreationException exception) {

@@ -64,12 +64,17 @@ public class CampaignController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<CampaignDTO> updateCampaign(@PathVariable String id, @RequestBody CampaignUpdateDTO campaignUpdateDTO) {
+    public ResponseEntity<CampaignDTO> updateCampaign(@PathVariable String id, @RequestBody CampaignUpdateDTO campaignUpdateDTO, @RequestHeader("Authorization") String header) {
         return new ResponseEntity<>(campaignService.updateCampaign(id, campaignUpdateDTO), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<CampaignDTO> closeCampaign(@PathVariable String id) {
+    @PatchMapping("/close/{id}")
+    public ResponseEntity<CampaignDTO> closeCampaign(@PathVariable String id, @RequestHeader("Authorization") String header) {
         return new ResponseEntity<>(campaignService.closeCampaign(id), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<CampaignDTO> deleteCampaign(@PathVariable String id, @RequestHeader("Authorization") String header) {
+        return new ResponseEntity<>(campaignService.deleteCampaign(id), HttpStatus.OK);
     }
 }

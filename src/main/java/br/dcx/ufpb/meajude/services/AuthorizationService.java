@@ -17,6 +17,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class AuthorizationService implements UserDetailsService {
 
@@ -28,6 +30,8 @@ public class AuthorizationService implements UserDetailsService {
 
     @Autowired
     private TokenService tokenService;
+
+    private User user;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -61,6 +65,17 @@ public class AuthorizationService implements UserDetailsService {
 
         String token = tokenService.generateToken((User) auth.getPrincipal());
 
+        Optional<User> optionalUser = userRepository.findActiveUserByEmail(authenticationDTO.getEmail());
+        this.user = optionalUser.orElse(null);
+
         return new LoginResponseDTO(token);
+    }
+
+    public User getLoggedUser() {
+        return user;
+    }
+
+    public boolean isUserLoggedIn() {
+        return user != null;
     }
 }

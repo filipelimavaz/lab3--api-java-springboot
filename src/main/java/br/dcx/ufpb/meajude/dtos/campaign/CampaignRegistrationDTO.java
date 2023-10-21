@@ -1,8 +1,7 @@
 package br.dcx.ufpb.meajude.dtos.campaign;
 
 import br.dcx.ufpb.meajude.entities.Campaign;
-import br.dcx.ufpb.meajude.entities.enums.CampaignStatus;
-import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

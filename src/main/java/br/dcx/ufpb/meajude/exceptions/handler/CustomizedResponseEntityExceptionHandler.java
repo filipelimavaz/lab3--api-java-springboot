@@ -1,12 +1,9 @@
 package br.dcx.ufpb.meajude.exceptions.handler;
 
-import br.dcx.ufpb.meajude.entities.Campaign;
+import br.com.ufpb.meajude.exceptions.*;
+import br.dcx.ufpb.meajude.dtos.errors.ErrorDetailsDTO;
 import br.dcx.ufpb.meajude.exceptions.*;
 import jakarta.validation.ConstraintViolation;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import br.dcx.ufpb.meajude.dtos.error.ErrorDetailsDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -44,11 +41,11 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
     @ExceptionHandler(UnauthorizedException.class)
     public ResponseEntity<ErrorDetailsDTO> UnauthorizedException(UnauthorizedException exception) {
         ErrorDetailsDTO error = new ErrorDetailsDTO();
-        error.setStatus(HttpStatus.NOT_FOUND.value());
+        error.setStatus(HttpStatus.UNAUTHORIZED.value());
         error.setTitle(exception.getTitle());
         error.setType(URI);
         error.setDetail(exception.getDetails());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
     }
 
     @ExceptionHandler(InvalidRequestException.class)
@@ -65,7 +62,7 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
     public ResponseEntity<List<ErrorDetailsDTO>> handleCustomValidationException(CustomValidationException exception) {
         List<ErrorDetailsDTO> errors = new ArrayList<>();
 
-        for (ConstraintViolation<Campaign> violation : exception.getViolations()) {
+        for (ConstraintViolation<Object> violation : exception.getViolations()) {
             String fieldName = violation.getPropertyPath().toString();
             String errorMessage = violation.getMessage();
 

@@ -31,7 +31,6 @@ public class SecurityFilter extends OncePerRequestFilter {
             UserDetails user = userRepository.findByEmail(email);
 
             if (user != null) {
-                // Verifique se o objeto "user" não é nulo antes de acessar "getAuthorities()"
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }

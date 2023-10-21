@@ -1,23 +1,17 @@
 package br.dcx.ufpb.meajude.controllers;
 
-import br.dcx.ufpb.meajude.dtos.user.*;
-import br.dcx.ufpb.meajude.entities.User;
-import br.dcx.ufpb.meajude.repositories.UserRepository;
-import br.dcx.ufpb.meajude.security.TokenService;
+import br.com.ufpb.meajude.dtos.user.*;
 import br.dcx.ufpb.meajude.services.UserService;
+import br.dcx.ufpb.meajude.dtos.user.UserDTO;
+import br.dcx.ufpb.meajude.dtos.user.UserUpdateDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import jakarta.validation.Valid;
 
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -41,7 +35,7 @@ public class UserController {
     }
 
     @PatchMapping("/{email}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable String email, @RequestBody UserUpdateDTO userUpdateDTO) {
+    public ResponseEntity<UserDTO> updateUser(@PathVariable String email, @RequestBody UserUpdateDTO userUpdateDTO, @RequestHeader("Authorization") String header) {
         return new ResponseEntity<>(userService.updateUser(email, userUpdateDTO), HttpStatus.OK);
     }
 
