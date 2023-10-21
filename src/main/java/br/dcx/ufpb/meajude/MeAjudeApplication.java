@@ -6,7 +6,6 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 @SpringBootApplication
 @EntityScan("br.dcx.ufpb.meajude.entities")
-
 public class MeAjudeApplication {
 
 	public static void main(String[] args) {

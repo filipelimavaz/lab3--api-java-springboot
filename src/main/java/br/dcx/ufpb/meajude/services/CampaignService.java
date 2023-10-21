@@ -5,7 +5,6 @@ import br.dcx.ufpb.meajude.dtos.campaign.CampaignRegistrationDTO;
 import br.dcx.ufpb.meajude.dtos.campaign.CampaignUpdateDTO;
 import br.dcx.ufpb.meajude.entities.Campaign;
 import br.dcx.ufpb.meajude.entities.enums.CampaignStatus;
-import br.com.ufpb.meajude.exceptions.*;
 import br.dcx.ufpb.meajude.repositories.CampaignRepository;
 import br.dcx.ufpb.meajude.repositories.UserRepository;
 import br.dcx.ufpb.meajude.exceptions.*;
