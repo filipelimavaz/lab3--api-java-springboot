@@ -68,7 +68,7 @@ public class CampaignController {
         return new ResponseEntity<>(campaignService.updateCampaign(id, campaignUpdateDTO), HttpStatus.OK);
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/close/{id}")
     public ResponseEntity<CampaignDTO> closeCampaign(@PathVariable String id, @RequestHeader("Authorization") String header) {
         return new ResponseEntity<>(campaignService.closeCampaign(id), HttpStatus.OK);
     }
