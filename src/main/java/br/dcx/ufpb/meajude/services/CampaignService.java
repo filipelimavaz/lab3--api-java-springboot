@@ -101,7 +101,8 @@ public class CampaignService {
             }
             return campaignDTOList;
         }
-        return null; //EXCEÇÃO PARA CASO NENHUMA CAMPANHA NÃO SEJA ENCONTRADA
+        throw new NotFoundException("No active campaigns found",
+                "There are no active campaigns registered.");
     }
 
     //Retorna todas campanhas ATIVAS ordenadas pela DATA DE CRIAÇÃO
@@ -116,7 +117,8 @@ public class CampaignService {
             }
             return campaignDTOList;
         }
-        return null; //EXCEÇÃO PARA CASO NENHUMA CAMPANHA NÃO SEJA ENCONTRADA
+        throw new NotFoundException("No active campaigns found",
+                "There are no active campaigns registered.");
     }
 
     //Retorna todas campanhas ENCERRADAS ordenadas pela DATA DE CRIAÇÃO
@@ -131,7 +133,8 @@ public class CampaignService {
             }
             return campaignDTOList;
         }
-        return null; //EXCEÇÃO PARA CASO NENHUMA CAMPANHA NÃO SEJA ENCONTRADA
+        throw new NotFoundException("No closed campaigns found",
+                "There are no closed campaigns registered.");
     }
 
     //Retorna todas as campanhas ATIVAS que atingiram a META
@@ -146,7 +149,8 @@ public class CampaignService {
             }
             return campaignDTOList;
         }
-        return null; //EXCEÇÃO PARA CASO NENHUMA CAMPANHA NÃO SEJA ENCONTRADA
+        throw new NotFoundException("No active campaigns found",
+                "There are no active campaigns that reached goal registered.");
     }
 
     //Retorna todas as campanhas ENCERRADAS que atingiram a META
@@ -161,7 +165,8 @@ public class CampaignService {
             }
             return campaignDTOList;
         }
-        return null; //EXCEÇÃO PARA CASO NENHUMA CAMPANHA NÃO SEJA ENCONTRADA
+        throw new NotFoundException("No closed campaigns found",
+                "There are no closed campaigns that reached goal registered.");
     }
 
     //Retorna todas campanhas EM BREVE
@@ -176,7 +181,8 @@ public class CampaignService {
             }
             return campaignDTOList;
         }
-        return null; //EXCEÇÃO PARA CASO NENHUMA CAMPANHA NÃO SEJA ENCONTRADA
+        throw new NotFoundException("No upcoming campaigns found",
+                "There are no upcoming campaigns at the moment.");
     }
 
     //Retorna todas campanhas ENCERRADAS
@@ -191,7 +197,8 @@ public class CampaignService {
             }
             return campaignDTOList;
         }
-        return null; //EXCEÇÃO PARA CASO NENHUMA CAMPANHA NÃO SEJA ENCONTRADA
+        throw new NotFoundException("No closed campaigns found",
+                "There are no closed campaigns registered.");
     }
 
     //Retorna todas campanhas do USUÁRIO
@@ -206,7 +213,8 @@ public class CampaignService {
             }
             return campaignDTOList;
         }
-        return null; //EXCEÇÃO PARA CASO NENHUMA CAMPANHA NÃO SEJA ENCONTRADA
+        throw new NotFoundException("No campaigns found",
+                "This user was no campaigns.");
     }
 
     //Retorna TODAS campanhas
@@ -221,7 +229,8 @@ public class CampaignService {
             }
             return campaignDTOList;
         }
-        return null; //EXCEÇÃO PARA CASO NENHUMA CAMPANHA NÃO SEJA ENCONTRADA
+        throw new NotFoundException("No campaigns found",
+                "There are no campaigns in the database.");
     }
 
     public CampaignDTO updateCampaign(String id, CampaignUpdateDTO campaignUpdateDTO) {
