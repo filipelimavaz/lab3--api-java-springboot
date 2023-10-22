@@ -6,7 +6,6 @@ import br.dcx.ufpb.meajude.entities.User;
 import br.dcx.ufpb.meajude.dtos.user.UserRegistrationDTO;
 import br.dcx.ufpb.meajude.exceptions.InvalidRequestException;
 import br.dcx.ufpb.meajude.repositories.UserRepository;
-import br.dcx.ufpb.meajude.security.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
