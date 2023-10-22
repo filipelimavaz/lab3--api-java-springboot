@@ -85,7 +85,8 @@ public class DonationService {
             Donation donation = optionalDonation.get();
             return DonationDTO.from(donation);
         }
-        return null;
+        throw new NotFoundException("Donation not found",
+                "Please check if the ID is correct.");
     }
 
     //Retorna TODAS as doações e ordena pela data de criação
@@ -100,6 +101,7 @@ public class DonationService {
             }
             return donationDTOList;
         }
-        return null;
+        throw new NotFoundException("No donations founded",
+                "There are no donations in the database.");
     }
 }

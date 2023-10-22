@@ -30,7 +30,8 @@ public class UserService {
             User user = optionalUser.get();
             return UserDTO.from(user);
         }
-        return null;
+        throw new NotFoundException("User was not found",
+                "Please verify if the entered email is correct or if it is registered on the platform.");
     }
 
     public List<UserDTO> returnUserList(){
@@ -44,7 +45,8 @@ public class UserService {
             }
             return userDTOList;
         }
-        return null;
+        throw new NotFoundException("Not found",
+                "There are no users in the database.");
     }
 
     public UserDTO updateUser(String email, UserUpdateDTO userUpdateDTO) {
