@@ -40,7 +40,7 @@ public class AuthenticationController {
     @PostMapping("/sign-up")
     @Operation(summary = "User sign-up", description = "Sign up a new user", tags = { "Authentication" }, responses = {
             @ApiResponse(responseCode = "201", description = "User created successfully"),
-            @ApiResponse(responseCode = "400", description = "You must provide a different email")
+            @ApiResponse(responseCode = "400", description = "Invalid request. Please, check information")
     })
     public ResponseEntity<UserRegistrationDTO> registerUser(@RequestBody UserRegistrationDTO userRegistrationDTO) {
         return new ResponseEntity<>(authorizationService.registerUser(userRegistrationDTO), HttpStatus.CREATED);
