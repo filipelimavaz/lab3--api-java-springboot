@@ -55,7 +55,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{email}")
-    @Operation(summary = "Delete suer", description = "Deleting user", security = @SecurityRequirement(name = "bearerAuth"), tags = { "Users" }, responses = {
+    @Operation(summary = "Delete user", description = "Deleting user", security = @SecurityRequirement(name = "bearerAuth"), tags = { "Users" }, responses = {
             @ApiResponse(responseCode = "200", description = "The user was deleted"),
             @ApiResponse(responseCode = "400", description = "Incorrect parameters")
     })
