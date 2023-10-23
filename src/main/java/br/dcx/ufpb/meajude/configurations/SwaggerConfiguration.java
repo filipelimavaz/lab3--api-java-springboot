@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 
 
-@OpenAPIDefinition(info = @Info(title = "Minha API de estoque", version = "v1"))
+@OpenAPIDefinition(info = @Info(title = "Me ajude API", version = "v1"))
 @SecurityScheme(
         name = "bearerAuth",
         type = SecuritySchemeType.HTTP,
