@@ -5,8 +5,8 @@ import br.dcx.ufpb.meajude.dtos.user.LoginResponseDTO;
 import br.dcx.ufpb.meajude.entities.User;
 import br.dcx.ufpb.meajude.dtos.user.UserRegistrationDTO;
 import br.dcx.ufpb.meajude.exceptions.InvalidRequestException;
+import br.dcx.ufpb.meajude.exceptions.UnauthorizedException;
 import br.dcx.ufpb.meajude.repositories.UserRepository;
-import br.dcx.ufpb.meajude.security.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -61,15 +61,20 @@ public class AuthorizationService implements UserDetailsService {
         UsernamePasswordAuthenticationToken usernamePassword =
                 new UsernamePasswordAuthenticationToken(authenticationDTO.getEmail(), authenticationDTO.getPassword());
 
-        Authentication auth = this.authenticationManager.authenticate(usernamePassword);
+        try {
+            Authentication auth = this.authenticationManager.authenticate(usernamePassword);
 
-        String token = tokenService.generateToken((User) auth.getPrincipal());
+            String token = tokenService.generateToken((User) auth.getPrincipal());
 
-        Optional<User> optionalUser = userRepository.findActiveUserByEmail(authenticationDTO.getEmail());
-        this.user = optionalUser.orElse(null);
+            Optional<User> optionalUser = userRepository.findActiveUserByEmail(authenticationDTO.getEmail());
+            this.user = optionalUser.orElse(null);
 
-        return new LoginResponseDTO(token);
+            return new LoginResponseDTO(token);
+        } catch (UnauthorizedException e) {
+            throw new UnauthorizedException("Incorrect email or password", "Please check if the email and password are correct.");
+        }
     }
+
 
     public User getLoggedUser() {
         return user;
