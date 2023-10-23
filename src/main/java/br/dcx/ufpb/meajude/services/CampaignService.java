@@ -237,8 +237,9 @@ public class CampaignService {
     public CampaignDTO updateCampaign(String id, CampaignUpdateDTO campaignUpdateDTO) {
         if(!authorizationService.isUserLoggedIn()) {
             throw new InvalidRequestException("Invalid Resquest",
-                    "You must be logged in to create a campaign.");
+                    "You must be logged in to update a campaign.");
         }
+
         Optional<Campaign> optionalCampaign = campaignRepository.findActiveCampaignById(Long.parseLong(id));
         LocalDate currentDate = LocalDate.now();
 
@@ -267,19 +268,14 @@ public class CampaignService {
     public CampaignDTO closeCampaign(String id) {
         if(!authorizationService.isUserLoggedIn()) {
             throw new InvalidRequestException("Invalid Resquest",
-                    "You must be logged in to create a campaign.");
+                    "You must be logged in to close a campaign.");
         }
 
         Optional<Campaign> optionalCampaign = campaignRepository.findActiveCampaignById(Long.parseLong(id));
         if (optionalCampaign.isPresent()) {
             Campaign campaign = optionalCampaign.get();
-            if(campaign.getUser().equals(authorizationService.getLoggedUser())) {
-                campaign.setStatus(CampaignStatus.CLOSED);
-                return CampaignDTO.from(campaign);
-            } else {
-                throw new InvalidRequestException("Invalid Resquest",
-                        "The campaign only be finished by his owner.");
-            }
+            campaign.setStatus(CampaignStatus.CLOSED);
+            return CampaignDTO.from(campaign);
         }
         throw new NotFoundException("Campaign not found",
                 "Please verify if the campaign id is correct or if it's campaign is registered on the platform.");
