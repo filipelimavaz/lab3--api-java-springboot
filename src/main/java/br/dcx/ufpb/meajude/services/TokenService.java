@@ -22,7 +22,7 @@ public class TokenService {
     public String generateToken(User user) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
-            Date expirationDate = new Date(System.currentTimeMillis() + 5 * 60 * 1000); // 5 minutos de expiração
+            Date expirationDate = new Date(System.currentTimeMillis() + 60 * 60 * 1000); // 1 hora de expiração
             String token = JWT.create()
                     .withIssuer("meAjude-api")
                     .withSubject(user.getEmail())
