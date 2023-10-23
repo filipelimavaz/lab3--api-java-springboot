@@ -5,9 +5,11 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.cglib.core.Local;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -41,17 +43,17 @@ public class Campaign {
     private User user;
 
     @NotNull(message = "Start date can't be null")
-    @Future(message = "The end date must be in the present or in the future")
+    @FutureOrPresent(message = "The start date must be in the present or in the future")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date startDate;
+    private LocalDate startDate;
 
     @NotNull(message = "End date can't be null")
     @Future(message = "The end date must be in the future")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date endDate;
+    private LocalDate endDate;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date creationDate;
+    private LocalDate creationDate;
 
     @OneToMany(mappedBy = "campaign", cascade = CascadeType.ALL)
     private List<Donation> donations;

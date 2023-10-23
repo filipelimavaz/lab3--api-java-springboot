@@ -12,6 +12,7 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
@@ -46,7 +47,7 @@ public class CampaignService {
                     "You must be logged in to create a campaign.");
         }
 
-        Date currentDate = Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        LocalDate currentDate = LocalDate.now();
         Campaign campaign = new Campaign();
         campaign.setTitle(campaignRegistrationDTO.getTitle());
         campaign.setDescription(campaignRegistrationDTO.getDescription());
@@ -57,13 +58,13 @@ public class CampaignService {
         campaign.setCreationDate(currentDate);
         campaign.setUser(authorizationService.getLoggedUser());
 
-        if(campaign.getStartDate().after(currentDate)) {
+        if(campaign.getStartDate().isAfter(currentDate)) {
             campaign.setStatus(CampaignStatus.NOT_STARTED);
         } else {
             campaign.setStatus(CampaignStatus.ACTIVE);
         }
 
-        if(campaign.getStartDate().after(campaign.getEndDate())) {
+        if(campaign.getStartDate().isAfter(campaign.getEndDate())) {
             throw new InvalidFieldException("Campaign can't be created: Invalid date range",
                     "Please verify the start date. The start date cannot be later than the end date.");
         }
@@ -239,11 +240,11 @@ public class CampaignService {
                     "You must be logged in to create a campaign.");
         }
         Optional<Campaign> optionalCampaign = campaignRepository.findActiveCampaignById(Long.parseLong(id));
-        Date currentDate = Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        LocalDate currentDate = LocalDate.now();
 
         if (optionalCampaign.isPresent()) {
             Campaign campaign = optionalCampaign.get();
-                if(campaign.getEndDate().after(currentDate) || campaign.getUser().equals(authorizationService.getLoggedUser())) {
+                if(campaign.getEndDate().isAfter(currentDate) || campaign.getUser().equals(authorizationService.getLoggedUser())) {
                     campaignUpdateDTO.update(campaign);
 
                     Set<ConstraintViolation<Campaign>> violations = localValidatorFactoryBean.validate(campaign);

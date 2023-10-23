@@ -34,7 +34,7 @@ public class AuthorizationService implements UserDetailsService {
     private User user;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) {
         return userRepository.findByEmail(email);
     }
 
@@ -71,6 +71,7 @@ public class AuthorizationService implements UserDetailsService {
 
             return new LoginResponseDTO(token);
         } catch (UnauthorizedException e) {
+            System.out.println(".");
             throw new UnauthorizedException("Incorrect email or password", "Please check if the email and password are correct.");
         }
     }

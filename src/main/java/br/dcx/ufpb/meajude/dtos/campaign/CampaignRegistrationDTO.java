@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -15,8 +16,8 @@ public class CampaignRegistrationDTO {
     private String title;
     private String description;
     private BigDecimal goal;
-    private Date startDate;
-    private Date endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
 
     public static CampaignRegistrationDTO from(Campaign campaign) {
         CampaignRegistrationDTO campaignRegistrationDTO = new CampaignRegistrationDTO();
