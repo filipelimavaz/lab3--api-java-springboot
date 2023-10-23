@@ -50,11 +50,11 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
     @ExceptionHandler(InvalidRequestException.class)
     public ResponseEntity<ErrorDetailsDTO> InvalidRequestException(InvalidRequestException exception) {
         ErrorDetailsDTO error = new ErrorDetailsDTO();
-        error.setStatus(HttpStatus.NOT_FOUND.value());
+        error.setStatus(HttpStatus.BAD_REQUEST.value());
         error.setTitle(exception.getTitle());
         error.setType(URI);
         error.setDetail(exception.getDetails());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
     @ExceptionHandler(CustomValidationException.class)
