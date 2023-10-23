@@ -1,5 +1,6 @@
-package br.dcx.ufpb.meajude.security;
+package br.dcx.ufpb.meajude.configurations;
 
+import br.dcx.ufpb.meajude.filters.SecurityFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

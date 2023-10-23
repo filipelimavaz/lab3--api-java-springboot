@@ -1,4 +1,4 @@
-package br.dcx.ufpb.meajude.security;
+package br.dcx.ufpb.meajude.services;
 
 import br.dcx.ufpb.meajude.entities.User;
 import com.auth0.jwt.JWT;
