@@ -2,7 +2,7 @@
 
 ## Overview
 
-**meajude.com** is a web platform designed to simplify the donation process for individuals and organizations. It connects those who want to make a positive impact with those in need. Here's a summary of the key features:
+Many people are interested in making donations but sometimes lack the necessary time to find a motivating campaign. As we know, we live in a country with very high social inequality, and as a result, there are many people in need. On one hand, there are individuals who want to contribute to improving the lives of those in need, and on the other hand, there are people who genuinely require support. We need a system to support this network of donations: **meajude.com**.
 
 ## User Registration
 
