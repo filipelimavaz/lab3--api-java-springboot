@@ -1,5 +1,3 @@
-# projeto-final-dsc
-
 # meajude.com
 
 ## Overview
