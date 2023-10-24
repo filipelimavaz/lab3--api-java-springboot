@@ -4,6 +4,8 @@ import br.dcx.ufpb.meajude.dtos.donation.DonationDTO;
 import br.dcx.ufpb.meajude.dtos.donation.DonationGiverDTO;
 import br.dcx.ufpb.meajude.services.DonationService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +27,7 @@ public class DonationController {
             @ApiResponse(responseCode = "200", description = "The donating was made"),
             @ApiResponse(responseCode = "400", description = "Incorrect parameters")
     })
-    public ResponseEntity<DonationDTO> donationGiver(@RequestBody DonationGiverDTO donationGiverDTO, @RequestHeader("Authorization") String header) {
+    public ResponseEntity<DonationDTO> donationGiver(@RequestBody DonationGiverDTO donationGiverDTO, @Parameter(description = "Bearer Token Authorization", required = true, hidden = true, schema = @Schema(implementation = String.class)) @RequestHeader("Authorization") String header) {
         return new ResponseEntity<>(donationService.donationGiver(donationGiverDTO), HttpStatus.OK);
     }
 
