@@ -5,6 +5,8 @@ import br.dcx.ufpb.meajude.dtos.campaign.CampaignRegistrationDTO;
 import br.dcx.ufpb.meajude.dtos.campaign.CampaignUpdateDTO;
 import br.dcx.ufpb.meajude.services.CampaignService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +29,7 @@ public class CampaignController {
             @ApiResponse(responseCode = "400", description = "Incorrect parameters")
 
     })
-    public ResponseEntity<CampaignDTO> createCampaign(@RequestBody CampaignRegistrationDTO campaignRegistrationDTO, @RequestHeader("Authorization") String header) {
+    public ResponseEntity<CampaignDTO> createCampaign(@RequestBody CampaignRegistrationDTO campaignRegistrationDTO, @Parameter(description = "Bearer Token Authorization", required = true, hidden = true, schema = @Schema(implementation = String.class)) @RequestHeader("Authorization") String header) {
         return new ResponseEntity<>(campaignService.createCampaign(campaignRegistrationDTO), HttpStatus.CREATED);
     }
 
@@ -109,7 +111,7 @@ public class CampaignController {
             @ApiResponse(responseCode = "404", description = "Incorrect parameters")
 
     })
-    public ResponseEntity<CampaignDTO> updateCampaign(@PathVariable String id, @RequestBody CampaignUpdateDTO campaignUpdateDTO, @RequestHeader("Authorization") String header) {
+    public ResponseEntity<CampaignDTO> updateCampaign(@PathVariable String id, @RequestBody CampaignUpdateDTO campaignUpdateDTO, @Parameter(description = "Bearer Token Authorization", required = true, hidden = true, schema = @Schema(implementation = String.class)) @RequestHeader("Authorization") String header) {
         return new ResponseEntity<>(campaignService.updateCampaign(id, campaignUpdateDTO), HttpStatus.OK);
     }
 
@@ -118,7 +120,7 @@ public class CampaignController {
             @ApiResponse(responseCode = "200", description = "The campaign was closed"),
             @ApiResponse(responseCode = "404", description = "Incorrect parameters")
     })
-    public ResponseEntity<CampaignDTO> closeCampaign(@PathVariable String id, @RequestHeader("Authorization") String header) {
+    public ResponseEntity<CampaignDTO> closeCampaign(@PathVariable String id, @Parameter(description = "Bearer Token Authorization", required = true, hidden = true, schema = @Schema(implementation = String.class)) @RequestHeader("Authorization") String header) {
         return new ResponseEntity<>(campaignService.closeCampaign(id), HttpStatus.OK);
     }
 
@@ -127,7 +129,7 @@ public class CampaignController {
             @ApiResponse(responseCode = "200", description = "The campaign was deleted"),
             @ApiResponse(responseCode = "404", description = "Incorrect parameters")
     })
-    public ResponseEntity<CampaignDTO> deleteCampaign(@PathVariable String id, @RequestHeader("Authorization") String header) {
+    public ResponseEntity<CampaignDTO> deleteCampaign(@PathVariable String id, @Parameter(description = "Bearer Token Authorization", required = true, hidden = true, schema = @Schema(implementation = String.class)) @RequestHeader("Authorization") String header) {
         return new ResponseEntity<>(campaignService.deleteCampaign(id), HttpStatus.OK);
     }
 }

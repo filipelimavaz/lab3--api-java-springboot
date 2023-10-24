@@ -4,6 +4,8 @@ import br.dcx.ufpb.meajude.services.UserService;
 import br.dcx.ufpb.meajude.dtos.user.UserDTO;
 import br.dcx.ufpb.meajude.dtos.user.UserUpdateDTO;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +52,7 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "Incorrect parameters")
 
     })
-    public ResponseEntity<UserDTO> updateUser(@PathVariable String email, @RequestBody UserUpdateDTO userUpdateDTO, @RequestHeader("Authorization") String header) {
+    public ResponseEntity<UserDTO> updateUser(@PathVariable String email, @RequestBody UserUpdateDTO userUpdateDTO, @Parameter(description = "Bearer Token Authorization", required = true, hidden = true, schema = @Schema(implementation = String.class)) @RequestHeader("Authorization") String header) {
         return new ResponseEntity<>(userService.updateUser(email, userUpdateDTO), HttpStatus.OK);
     }
 
@@ -59,7 +61,7 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "The user was deleted"),
             @ApiResponse(responseCode = "400", description = "Incorrect parameters")
     })
-    public ResponseEntity<UserDTO> deleteUser(@PathVariable String email, @RequestHeader("Authorization") String header) {
+    public ResponseEntity<UserDTO> deleteUser(@PathVariable String email, @Parameter(description = "Bearer Token Authorization", required = true, hidden = true, schema = @Schema(implementation = String.class)) @RequestHeader("Authorization") String header) {
         return new ResponseEntity<>(userService.deleteUser(email), HttpStatus. OK);
     }
 }
