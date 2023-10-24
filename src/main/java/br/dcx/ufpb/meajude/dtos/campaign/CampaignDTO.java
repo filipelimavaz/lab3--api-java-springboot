@@ -14,6 +14,7 @@ import java.util.Date;
 public class CampaignDTO {
 
     private CampaignStatus campaignStatus;
+    private String id;
     private String title;
     private String description;
     private BigDecimal donationAmount;
@@ -24,6 +25,7 @@ public class CampaignDTO {
 
     public static CampaignDTO from(Campaign campaign) {
         CampaignDTO campaignDTO = new CampaignDTO();
+        campaignDTO.setId(campaignDTO.getId());
         campaignDTO.setCampaignStatus(campaign.getStatus());
         campaignDTO.setTitle(campaign.getTitle());
         campaignDTO.setDescription(campaign.getDescription());

@@ -46,4 +46,13 @@ public class DonationController {
     public ResponseEntity<List<DonationDTO>> returnAllDonationList() {
         return new ResponseEntity<>(donationService.returnAllDonationList(), HttpStatus.OK);
     }
+
+    @GetMapping("/campaigns/{id}")
+    @Operation(summary = "Donations by id", description = "Returning all campaign donations by id", tags = { "Donations" }, responses = {
+            @ApiResponse(responseCode = "200", description = "Donations returned"),
+            @ApiResponse(responseCode = "404", description = "No donation was found")
+    })
+    public ResponseEntity<List<DonationDTO>> returnCampaignDonationList(@PathVariable String id) {
+        return new ResponseEntity<>(donationService.returnCampaignDonationList(id), HttpStatus.OK);
+    }
 }

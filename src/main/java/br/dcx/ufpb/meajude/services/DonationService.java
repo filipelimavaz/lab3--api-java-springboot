@@ -104,4 +104,25 @@ public class DonationService {
         throw new NotFoundException("No donations founded",
                 "There are no donations in the database.");
     }
+
+    public List<DonationDTO> returnCampaignDonationList(String campaignId) {
+        Optional<Campaign> optionalCampaign = campaignRepository.findById(Long.parseLong(campaignId));
+
+        if (optionalCampaign.isPresent()) {
+            Campaign campaign = optionalCampaign.get();
+            List<Donation> donationList = campaign.getDonations();
+
+            List<DonationDTO> donationDTOList = new ArrayList<>();
+
+            for (Donation donation : donationList) {
+                DonationDTO donationDTO = DonationDTO.from(donation);
+                donationDTOList.add(donationDTO);
+            }
+
+            return donationDTOList;
+        } else {
+            throw new NotFoundException("Campaign not found",
+                    "Please check if the campaign ID is correct.");
+        }
+    }
 }

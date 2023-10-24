@@ -12,12 +12,14 @@ import java.util.Date;
 public class DonationDTO {
 
     private Long campaignId;
+    private String donationId;
     private BigDecimal donationValue;
     private Date donationDate;
 
     public static DonationDTO from(Donation donation) {
         DonationDTO donationDTO = new DonationDTO();
         donationDTO.setCampaignId(donation.getCampaign().getId());
+        donationDTO.setDonationId(donationDTO.getDonationId());
         donationDTO.setDonationValue(donation.getDonationValue());
         donationDTO.setDonationDate(donation.getDonationDate());
         return donationDTO;
