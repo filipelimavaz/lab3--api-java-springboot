@@ -14,7 +14,7 @@
 	<name>meajude</name>
 	<description>Many people are interested in making donations, but sometimes they don&apos;t have the time to find a campaign that motivates them. As we know, we live in a country where social inequality is very high and therefore there are many people in need. On the one hand, people who want to do something to help improve the lives of those who need it, and on the other, people who really need support. We need a system to support this donation network: meajude.com</description>
 	<properties>
-		<java.version>20</java.version>
+		<java.version>16</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
