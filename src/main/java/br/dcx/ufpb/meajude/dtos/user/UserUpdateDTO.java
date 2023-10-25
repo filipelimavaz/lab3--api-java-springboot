@@ -37,8 +37,40 @@ public class UserUpdateDTO {
                 user.setIdentityDocument(this.updateInformation);
                 return user;
             case "userType":
-                user.setUserType(UserType.valueOf(this.updateInformation));
-                return user;
+                switch (updateInformation) {
+                    case "ONG" -> {
+                        user.setUserType(UserType.ONG);
+                        return user;
+                    }
+                    case "PERSON" -> {
+                        user.setUserType(UserType.PERSON);
+                        return user;
+                    }
+                    case "CHURCH" -> {
+                        user.setUserType(UserType.CHURCH);
+                        return user;
+                    }
+                    case "SOCIETY" -> {
+                        user.setUserType(UserType.SOCIETY);
+                        return user;
+                    }
+                    case "ASSOCIATION" -> {
+                        user.setUserType(UserType.ASSOCIATION);
+                        return user;
+                    }
+                    case "STATE_GOVERNMENT" -> {
+                        user.setUserType(UserType.STATE_GOVERNMENT);
+                        return user;
+                    }
+                    case "FEDERAL_GOVERNMENT" -> {
+                        user.setUserType(UserType.FEDERAL_GOVERNMENT);
+                        return user;
+                    }
+                    case "MUNICIPAL_GOVERNMENT" -> {
+                        user.setUserType(UserType.MUNICIPAL_GOVERNMENT);
+                        return user;
+                    }
+                }
             case "phone":
                 user.setPhone(this.updateInformation);
                 return user;

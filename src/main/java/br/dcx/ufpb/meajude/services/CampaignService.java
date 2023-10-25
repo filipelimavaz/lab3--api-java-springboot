@@ -13,6 +13,7 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.Local;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
@@ -39,6 +40,23 @@ public class CampaignService {
 
     @Autowired
     private Validator validator;
+
+    @Scheduled(cron = "0 0 0 * * *") // Executar à meia-noite todos os dias
+    public void updateCampaignStatusAtMidnight() {
+        LocalDate currentDate = LocalDate.now();
+        List<Campaign> campaigns = campaignRepository.findAll();
+
+        for (Campaign campaign : campaigns) {
+            if (currentDate.isBefore(campaign.getStartDate())) {
+                campaign.setStatus(CampaignStatus.NOT_STARTED);
+            } else if (currentDate.isAfter(campaign.getEndDate())) {
+                campaign.setStatus(CampaignStatus.CLOSED);
+            } else {
+                campaign.setStatus(CampaignStatus.ACTIVE);
+            }
+            campaignRepository.save(campaign);
+        }
+    }
 
     @Transactional
     public CampaignDTO createCampaign(CampaignRegistrationDTO campaignRegistrationDTO) {
@@ -256,7 +274,7 @@ public class CampaignService {
     }
 
     public CampaignDTO closeCampaign(String id) {
-        Optional<Campaign> optionalCampaign = campaignRepository.findActiveCampaignById(Long.parseLong(id));
+        Optional<Campaign> optionalCampaign = campaignRepository.findById(Long.parseLong(id));
         if (optionalCampaign.isPresent()) {
             Campaign campaign = optionalCampaign.get();
             campaign.setStatus(CampaignStatus.CLOSED);
@@ -268,7 +286,7 @@ public class CampaignService {
     }
 
     public CampaignDTO deleteCampaign(String id) {
-        Optional<Campaign> optionalCampaign = campaignRepository.findActiveCampaignById(Long.parseLong(id));
+        Optional<Campaign> optionalCampaign = campaignRepository.findById(Long.parseLong(id));
         UserDetails userDetails = userRepository.findByEmail(authorizationService.getLoggedUser().getEmail());
 
         if(optionalCampaign.isPresent()) {
