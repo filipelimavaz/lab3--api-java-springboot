@@ -49,6 +49,7 @@ public class UserController {
     @PatchMapping("/{email}")
     @Operation(summary = "Update user", description = "Updating user", security = @SecurityRequirement(name = "bearerAuth"), tags = { "Users" }, responses = {
             @ApiResponse(responseCode = "200", description = "Information user updated"),
+            @ApiResponse(responseCode = "403", description = "User must be authenticated"),
             @ApiResponse(responseCode = "400", description = "Incorrect parameters")
 
     })
@@ -59,6 +60,7 @@ public class UserController {
     @PatchMapping("/delete/{email}")
     @Operation(summary = "Delete user", description = "Deleting user", security = @SecurityRequirement(name = "bearerAuth"), tags = { "Users" }, responses = {
             @ApiResponse(responseCode = "200", description = "The user was deleted"),
+            @ApiResponse(responseCode = "403", description = "User must be authenticated"),
             @ApiResponse(responseCode = "400", description = "Incorrect parameters")
     })
     public ResponseEntity<UserDTO> deleteUser(@PathVariable String email, @Parameter(description = "Bearer Token Authorization", required = true, hidden = true, schema = @Schema(implementation = String.class)) @RequestHeader("Authorization") String header) {

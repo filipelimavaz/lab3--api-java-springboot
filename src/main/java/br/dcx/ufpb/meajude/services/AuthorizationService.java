@@ -71,7 +71,6 @@ public class AuthorizationService implements UserDetailsService {
 
             return new LoginResponseDTO(token);
         } catch (UnauthorizedException e) {
-            System.out.println(".");
             throw new UnauthorizedException("Incorrect email or password", "Please check if the email and password are correct.");
         }
     }

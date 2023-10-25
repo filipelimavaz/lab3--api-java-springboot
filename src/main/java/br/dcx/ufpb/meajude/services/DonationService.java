@@ -40,11 +40,6 @@ public class DonationService {
     private Validator validator;
 
     public DonationDTO donationGiver(DonationGiverDTO donationGiverDTO) {
-        if(!authorizationService.isUserLoggedIn()) {
-            throw new InvalidRequestException("Invalid Resquest",
-                    "You must be logged in to create a campaign.");
-        }
-
         Optional<Campaign> optionalCampaign = campaignRepository.findActiveCampaignById(donationGiverDTO.getCampaignId());
         User user = authorizationService.getLoggedUser();
 
@@ -69,7 +64,6 @@ public class DonationService {
             donation.setUser(user);
             donation.setDonationDate(Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()));
             campaign.getDonations().add(donation);
-            campaign.setDonationAmount(campaign.getDonationAmount().add(donationGiverDTO.getDonationValue()));
             campaignRepository.save(campaign);
             donationRepository.save(donation);
             return DonationDTO.from(donation);

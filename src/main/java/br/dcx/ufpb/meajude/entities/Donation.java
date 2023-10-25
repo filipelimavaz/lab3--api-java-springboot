@@ -20,8 +20,7 @@ public class Donation {
     private Long id;
 
     @NotNull(message = "Donation amount can't be null")
-    @Positive(message = "The donation amount must be greater than zero")
-    private BigDecimal donationValue;
+    private BigDecimal donationValue = BigDecimal.ZERO;
 
     @ManyToOne
     @JoinColumn(name = "campaign_id")
@@ -33,4 +32,8 @@ public class Donation {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date donationDate;
+
+    public void setDonationValue(@Positive(message = "The donation amount must be greater than zero") BigDecimal value){
+        this.donationValue = value;
+    }
 }

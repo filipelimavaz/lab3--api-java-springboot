@@ -48,7 +48,7 @@ public class Campaign {
     private LocalDate startDate;
 
     @NotNull(message = "End date can't be null")
-    @Future(message = "The end date must be in the future")
+    @FutureOrPresent(message = "The end date must be in the present or in the future")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
 

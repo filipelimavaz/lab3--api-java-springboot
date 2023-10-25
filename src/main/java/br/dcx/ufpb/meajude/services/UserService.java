@@ -50,11 +50,6 @@ public class UserService {
     }
 
     public UserDTO updateUser(String email, UserUpdateDTO userUpdateDTO) {
-        if(!authorizationService.isUserLoggedIn()) {
-            throw new InvalidRequestException("Invalid Resquest",
-                    "You must be logged in to do an user update");
-        }
-
         Optional<User> optionalUser = userRepository.findActiveUserByEmail(email);
         String userEmail = authorizationService.getLoggedUser().getEmail();
 
@@ -79,7 +74,7 @@ public class UserService {
         UserDetails userDetails = userRepository.findByEmail(userEmail);
 
         if (optionalUser.isPresent()) {
-            if (userEmail.equals(email) || userDetails.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+            if (userEmail.equals(email)) {
                 System.out.println("if");
                 User user = optionalUser.get();
                 user.setDeleted(true);

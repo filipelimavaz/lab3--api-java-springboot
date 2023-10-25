@@ -25,6 +25,7 @@ public class DonationController {
     @PostMapping
     @Operation(summary = "Donate value", description = "Donating value", security = @SecurityRequirement(name = "bearerAuth"), tags = { "Donations" }, responses = {
             @ApiResponse(responseCode = "200", description = "The donating was made"),
+            @ApiResponse(responseCode = "403", description = "User must be authenticated"),
             @ApiResponse(responseCode = "400", description = "Incorrect parameters")
     })
     public ResponseEntity<DonationDTO> donationGiver(@RequestBody DonationGiverDTO donationGiverDTO, @Parameter(description = "Bearer Token Authorization", required = true, hidden = true, schema = @Schema(implementation = String.class)) @RequestHeader("Authorization") String header) {

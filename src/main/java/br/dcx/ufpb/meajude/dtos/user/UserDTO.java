@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class UserDTO {
+    private Long id;
     private String email;
     private String username;
     private UserType userType;
@@ -17,6 +18,7 @@ public class UserDTO {
 
     public static UserDTO from(User user) {
         UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
         userDTO.setUsername(user.getUsername());
         userDTO.setEmail(user.getEmail());
         userDTO.setUserType(user.getUserType());

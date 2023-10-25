@@ -11,13 +11,11 @@ import java.math.BigDecimal;
 public class DonationGiverDTO {
 
     private Long campaignId;
-    private Long userId;
     private BigDecimal donationValue;
 
     private static DonationGiverDTO from(Donation donation) {
         DonationGiverDTO donationGiverDTO = new DonationGiverDTO();
         donationGiverDTO.setCampaignId(donation.getCampaign().getId());
-        donationGiverDTO.setUserId(donation.getUser().getId());
         donationGiverDTO.setDonationValue(donation.getDonationValue());
         return donationGiverDTO;
     }

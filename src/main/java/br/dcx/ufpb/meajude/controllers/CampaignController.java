@@ -26,7 +26,8 @@ public class CampaignController {
     @PostMapping("/create")
     @Operation(summary = "Crete a campaign", description = "Creating a campaign", security = @SecurityRequirement(name = "bearerAuth"), tags = { "Campaigns" }, responses = {
             @ApiResponse(responseCode = "201", description = "Campaign created"),
-            @ApiResponse(responseCode = "400", description = "Incorrect parameters")
+            @ApiResponse(responseCode = "400", description = "Incorrect parameters"),
+            @ApiResponse(responseCode = "403", description = "User must be authenticated")
 
     })
     public ResponseEntity<CampaignDTO> createCampaign(@RequestBody CampaignRegistrationDTO campaignRegistrationDTO, @Parameter(description = "Bearer Token Authorization", required = true, hidden = true, schema = @Schema(implementation = String.class)) @RequestHeader("Authorization") String header) {
@@ -108,6 +109,7 @@ public class CampaignController {
     @PatchMapping("/{id}")
     @Operation(summary = "Update campaign", description = "Updating campaign", security = @SecurityRequirement(name = "bearerAuth"), tags = { "Campaigns" }, responses = {
             @ApiResponse(responseCode = "200", description = "Campaign updated"),
+            @ApiResponse(responseCode = "403", description = "User must be authenticated"),
             @ApiResponse(responseCode = "404", description = "Incorrect parameters")
 
     })
@@ -118,6 +120,7 @@ public class CampaignController {
     @PatchMapping("/close/{id}")
     @Operation(summary = "Close campaign", description = "Closing campaign", security = @SecurityRequirement(name = "bearerAuth"), tags = { "Campaigns" }, responses = {
             @ApiResponse(responseCode = "200", description = "The campaign was closed"),
+            @ApiResponse(responseCode = "403", description = "User must be authenticated"),
             @ApiResponse(responseCode = "404", description = "Incorrect parameters")
     })
     public ResponseEntity<CampaignDTO> closeCampaign(@PathVariable String id, @Parameter(description = "Bearer Token Authorization", required = true, hidden = true, schema = @Schema(implementation = String.class)) @RequestHeader("Authorization") String header) {
@@ -127,6 +130,7 @@ public class CampaignController {
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete campaign", description = "Deleting campaign", security = @SecurityRequirement(name = "bearerAuth"), tags = { "Campaigns" }, responses = {
             @ApiResponse(responseCode = "200", description = "The campaign was deleted"),
+            @ApiResponse(responseCode = "403", description = "User must be authenticated"),
             @ApiResponse(responseCode = "404", description = "Incorrect parameters")
     })
     public ResponseEntity<CampaignDTO> deleteCampaign(@PathVariable String id, @Parameter(description = "Bearer Token Authorization", required = true, hidden = true, schema = @Schema(implementation = String.class)) @RequestHeader("Authorization") String header) {

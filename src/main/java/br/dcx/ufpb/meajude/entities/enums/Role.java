@@ -1,8 +1,8 @@
 package br.dcx.ufpb.meajude.entities.enums;
 
 public enum Role {
-    ADMIN("Admin"),
-    NORMAL("Normal");
+    ADMIN("ADMIN"),
+    NORMAL("NORMAL");
 
     private String role;
 

@@ -42,11 +42,6 @@ public class CampaignService {
 
     @Transactional
     public CampaignDTO createCampaign(CampaignRegistrationDTO campaignRegistrationDTO) {
-        if(!authorizationService.isUserLoggedIn()) {
-            throw new InvalidRequestException("Invalid Resquest",
-                    "You must be logged in to create a campaign.");
-        }
-
         LocalDate currentDate = LocalDate.now();
         Campaign campaign = new Campaign();
         campaign.setTitle(campaignRegistrationDTO.getTitle());
@@ -235,11 +230,6 @@ public class CampaignService {
     }
 
     public CampaignDTO updateCampaign(String id, CampaignUpdateDTO campaignUpdateDTO) {
-        if(!authorizationService.isUserLoggedIn()) {
-            throw new InvalidRequestException("Invalid Resquest",
-                    "You must be logged in to update a campaign.");
-        }
-
         Optional<Campaign> optionalCampaign = campaignRepository.findActiveCampaignById(Long.parseLong(id));
         LocalDate currentDate = LocalDate.now();
 
@@ -253,7 +243,8 @@ public class CampaignService {
                         campaignRepository.save(campaign);
                         return CampaignDTO.from(campaign);
                     } else {
-                        return null; //NÃO FOI POSSÍVEL ATUALIZAR A CAMPANHA POIS UM DOS ATRIBUTOS FOI VIOLADO
+                        throw new InvalidFieldException("Invalid Field",
+                                "The required operation cannot be performed because some field was violated.");
                     }
                 } else {
                     throw new InvalidRequestException("Invalid Resquest",
@@ -266,11 +257,6 @@ public class CampaignService {
     }
 
     public CampaignDTO closeCampaign(String id) {
-        if(!authorizationService.isUserLoggedIn()) {
-            throw new InvalidRequestException("Invalid Resquest",
-                    "You must be logged in to close a campaign.");
-        }
-
         Optional<Campaign> optionalCampaign = campaignRepository.findActiveCampaignById(Long.parseLong(id));
         if (optionalCampaign.isPresent()) {
             Campaign campaign = optionalCampaign.get();
@@ -281,17 +267,12 @@ public class CampaignService {
                 "Please verify if the campaign id is correct or if it's campaign is registered on the platform.");
     }
     public CampaignDTO deleteCampaign(String id) {
-        if(!authorizationService.isUserLoggedIn()) {
-            throw new InvalidRequestException("Invalid Resquest",
-                    "You must be logged in to create a campaign.");
-        }
-
         Optional<Campaign> optionalCampaign = campaignRepository.findActiveCampaignById(Long.parseLong(id));
         UserDetails userDetails = userRepository.findByEmail(authorizationService.getLoggedUser().getEmail());
 
         if(optionalCampaign.isPresent()) {
             Campaign campaign = optionalCampaign.get();
-            if(campaign.getUser().equals(authorizationService.getLoggedUser()) || userDetails.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
+            if(campaign.getUser().equals(authorizationService.getLoggedUser())) {
                 if(campaign.getDonations().isEmpty()) {
                     campaignRepository.delete(campaign);
                 } else {
