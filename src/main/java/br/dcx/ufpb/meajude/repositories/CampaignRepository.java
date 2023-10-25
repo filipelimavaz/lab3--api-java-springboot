@@ -36,7 +36,7 @@ public interface CampaignRepository extends JpaRepository<Campaign, Long> {
     @Query("SELECT c FROM Campaign c WHERE c.status = 1 AND c.id = :id")
     Optional<Campaign> findActiveCampaignById(Long id);
 
-    @Query("SELECT c FROM Campaign c WHERE c.status = 3")
+    @Query("SELECT c FROM Campaign c WHERE c.status = 2")
     List<Campaign> findClosedCampaigns();
 
     @Query("SELECT c FROM Campaign c WHERE c.status = 0")

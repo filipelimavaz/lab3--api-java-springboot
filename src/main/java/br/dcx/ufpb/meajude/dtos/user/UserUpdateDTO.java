@@ -1,8 +1,10 @@
 package br.dcx.ufpb.meajude.dtos.user;
 
 import br.dcx.ufpb.meajude.entities.User;
+import br.dcx.ufpb.meajude.entities.enums.CampaignStatus;
 import br.dcx.ufpb.meajude.entities.enums.Role;
 import br.dcx.ufpb.meajude.entities.enums.UserType;
+import br.dcx.ufpb.meajude.exceptions.InvalidFieldException;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -19,7 +21,7 @@ public class UserUpdateDTO {
     }
 
     public User update(User user) {
-        String field = this.updateField.toLowerCase();
+        String field = this.updateField;
 
         switch (field) {
             case "email":
@@ -37,14 +39,11 @@ public class UserUpdateDTO {
             case "userType":
                 user.setUserType(UserType.valueOf(this.updateInformation));
                 return user;
-            case "role":
-                user.setRole(Role.valueOf(this.updateInformation));
-                return user;
             case "phone":
                 user.setPhone(this.updateInformation);
                 return user;
             default:
-                return null;
+                throw new InvalidFieldException("Invalid Field", "Verify field.");
         }
     }
 }

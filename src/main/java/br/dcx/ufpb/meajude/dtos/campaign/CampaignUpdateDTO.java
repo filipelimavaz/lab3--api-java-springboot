@@ -2,6 +2,7 @@ package br.dcx.ufpb.meajude.dtos.campaign;
 
 import br.dcx.ufpb.meajude.entities.Campaign;
 import br.dcx.ufpb.meajude.entities.enums.CampaignStatus;
+import br.dcx.ufpb.meajude.exceptions.InvalidFieldException;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -25,7 +26,7 @@ public class CampaignUpdateDTO {
 
     public Campaign update(Campaign campaign) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String field = this.updateField.toLowerCase();
+        String field = this.updateField;
 
         switch (field) {
             case "title":
@@ -43,11 +44,23 @@ public class CampaignUpdateDTO {
             case "endDate":
                 campaign.setEndDate(LocalDate.parse(updateInformation, formatter));
                 return campaign;
-            case "status":
-                campaign.setStatus(CampaignStatus.valueOf(this.updateInformation));
-                return campaign;
+            case "campaignStatus":
+                switch (updateInformation) {
+                    case "ACTIVE" -> {
+                        campaign.setStatus(CampaignStatus.ACTIVE);
+                        return campaign;
+                    }
+                    case "NOT_STARTED" -> {
+                        campaign.setStatus(CampaignStatus.NOT_STARTED);
+                        return campaign;
+                    }
+                    case "CLOSED" -> {
+                        campaign.setStatus(CampaignStatus.CLOSED);
+                        return campaign;
+                    }
+                }
             default:
-                return null;
+                throw new InvalidFieldException("Invalid Field", "Verify field.");
         }
     }
 }

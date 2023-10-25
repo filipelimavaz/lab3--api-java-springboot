@@ -230,14 +230,13 @@ public class CampaignService {
     }
 
     public CampaignDTO updateCampaign(String id, CampaignUpdateDTO campaignUpdateDTO) {
-        Optional<Campaign> optionalCampaign = campaignRepository.findActiveCampaignById(Long.parseLong(id));
+        Optional<Campaign> optionalCampaign = campaignRepository.findById(Long.parseLong(id));
         LocalDate currentDate = LocalDate.now();
 
         if (optionalCampaign.isPresent()) {
             Campaign campaign = optionalCampaign.get();
                 if(campaign.getUser().getEmail().equals(authorizationService.getLoggedUser().getEmail()) && (campaign.getEndDate().isAfter(currentDate)) || campaign.getEndDate().isEqual(currentDate)) {
                     campaignUpdateDTO.update(campaign);
-
                     Set<ConstraintViolation<Campaign>> violations = localValidatorFactoryBean.validate(campaign);
                     if (violations.isEmpty()) {
                         campaignRepository.save(campaign);
@@ -261,6 +260,7 @@ public class CampaignService {
         if (optionalCampaign.isPresent()) {
             Campaign campaign = optionalCampaign.get();
             campaign.setStatus(CampaignStatus.CLOSED);
+            campaignRepository.save(campaign);
             return CampaignDTO.from(campaign);
         }
         throw new NotFoundException("Campaign not found",
