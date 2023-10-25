@@ -235,7 +235,7 @@ public class CampaignService {
 
         if (optionalCampaign.isPresent()) {
             Campaign campaign = optionalCampaign.get();
-                if(campaign.getEndDate().isAfter(currentDate) || campaign.getUser().equals(authorizationService.getLoggedUser())) {
+                if(campaign.getUser().getEmail().equals(authorizationService.getLoggedUser().getEmail()) && (campaign.getEndDate().isAfter(currentDate)) || campaign.getEndDate().isEqual(currentDate)) {
                     campaignUpdateDTO.update(campaign);
 
                     Set<ConstraintViolation<Campaign>> violations = localValidatorFactoryBean.validate(campaign);
@@ -266,13 +266,14 @@ public class CampaignService {
         throw new NotFoundException("Campaign not found",
                 "Please verify if the campaign id is correct or if it's campaign is registered on the platform.");
     }
+
     public CampaignDTO deleteCampaign(String id) {
         Optional<Campaign> optionalCampaign = campaignRepository.findActiveCampaignById(Long.parseLong(id));
         UserDetails userDetails = userRepository.findByEmail(authorizationService.getLoggedUser().getEmail());
 
         if(optionalCampaign.isPresent()) {
             Campaign campaign = optionalCampaign.get();
-            if(campaign.getUser().equals(authorizationService.getLoggedUser())) {
+            if(campaign.getUser().getEmail().equals(authorizationService.getLoggedUser().getEmail())) {
                 if(campaign.getDonations().isEmpty()) {
                     campaignRepository.delete(campaign);
                 } else {

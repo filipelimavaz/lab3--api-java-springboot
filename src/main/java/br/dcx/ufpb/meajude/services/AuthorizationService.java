@@ -67,7 +67,7 @@ public class AuthorizationService implements UserDetailsService {
             String token = tokenService.generateToken((User) auth.getPrincipal());
 
             Optional<User> optionalUser = userRepository.findActiveUserByEmail(authenticationDTO.getEmail());
-            this.user = optionalUser.orElse(null);
+            this.user = optionalUser.get();
 
             return new LoginResponseDTO(token);
         } catch (UnauthorizedException e) {
