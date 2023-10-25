@@ -1,4 +1,4 @@
-# meajude.com
+# Final Project - DSC
 
 ## Overview
 
@@ -48,4 +48,11 @@ Many people are interested in making donations but sometimes lack the necessary 
 
 - List donations in chronological order, excluding donor identity.
 
----
+# Links
+
+- Home page: http://localhost:8080/meajude
+- Campaigns: http://localhost:8080/meajude/swagger-ui/index.html#/Campaigns
+- Authentication: http://localhost:8080/meajude/swagger-ui/index.html#/Authentication
+- Users: http://localhost:8080/meajude/swagger-ui/index.html#/Users
+- Donations: http://localhost:8080/meajude/swagger-ui/index.html#/Donations
+
