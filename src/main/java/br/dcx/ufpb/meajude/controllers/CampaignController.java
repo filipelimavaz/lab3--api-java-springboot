@@ -130,6 +130,7 @@ public class CampaignController {
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete campaign", description = "Deleting campaign", security = @SecurityRequirement(name = "bearerAuth"), tags = { "Campaigns" }, responses = {
             @ApiResponse(responseCode = "200", description = "The campaign was deleted"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "403", description = "User must be authenticated"),
             @ApiResponse(responseCode = "404", description = "Incorrect parameters")
     })
