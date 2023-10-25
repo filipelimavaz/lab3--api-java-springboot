@@ -50,7 +50,7 @@ Many people are interested in making donations but sometimes lack the necessary 
 
 # Links
 
-- Home page: http://localhost:8080/meajude
+- Home page: http://localhost:8080/meajude/swagger-ui/index.html
 - Campaigns: http://localhost:8080/meajude/swagger-ui/index.html#/Campaigns
 - Authentication: http://localhost:8080/meajude/swagger-ui/index.html#/Authentication
 - Users: http://localhost:8080/meajude/swagger-ui/index.html#/Users
