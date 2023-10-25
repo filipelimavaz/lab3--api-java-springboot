@@ -22,7 +22,7 @@ public class DonationController {
     @Autowired
     private DonationService donationService;
 
-    @PatchMapping
+    @PostMapping
     @Operation(summary = "Donate value", description = "Donating value", security = @SecurityRequirement(name = "bearerAuth"), tags = { "Donations" }, responses = {
             @ApiResponse(responseCode = "200", description = "The donating was made"),
             @ApiResponse(responseCode = "400", description = "Incorrect parameters")

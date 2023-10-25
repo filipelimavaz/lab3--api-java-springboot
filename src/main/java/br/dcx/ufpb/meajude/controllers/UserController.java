@@ -56,7 +56,7 @@ public class UserController {
         return new ResponseEntity<>(userService.updateUser(email, userUpdateDTO), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{email}")
+    @PatchMapping("/delete/{email}")
     @Operation(summary = "Delete user", description = "Deleting user", security = @SecurityRequirement(name = "bearerAuth"), tags = { "Users" }, responses = {
             @ApiResponse(responseCode = "200", description = "The user was deleted"),
             @ApiResponse(responseCode = "400", description = "Incorrect parameters")

@@ -83,7 +83,7 @@ public class UserService {
                 System.out.println("if");
                 User user = optionalUser.get();
                 user.setDeleted(true);
-                userRepository.delete(user);
+                userRepository.save(user);
                 return UserDTO.from(user);
             } else {
                 throw new UnauthorizedException("User does not have permission",

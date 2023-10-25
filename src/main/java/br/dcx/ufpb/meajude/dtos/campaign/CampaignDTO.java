@@ -25,7 +25,7 @@ public class CampaignDTO {
 
     public static CampaignDTO from(Campaign campaign) {
         CampaignDTO campaignDTO = new CampaignDTO();
-        campaignDTO.setId(campaignDTO.getId());
+        campaignDTO.setId(String.valueOf(campaign.getId()));
         campaignDTO.setCampaignStatus(campaign.getStatus());
         campaignDTO.setTitle(campaign.getTitle());
         campaignDTO.setDescription(campaign.getDescription());

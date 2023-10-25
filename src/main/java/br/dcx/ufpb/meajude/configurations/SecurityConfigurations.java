@@ -4,6 +4,7 @@ import br.dcx.ufpb.meajude.filters.SecurityFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -27,7 +28,14 @@ public class SecurityConfigurations {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .anyRequest().permitAll()
+                        .requestMatchers("/v3/api-docs", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/campaigns/create").hasAnyRole("ADMIN", "NORMAL")
+                        .requestMatchers(HttpMethod.PATCH, "/api/campaigns/**").hasAnyRole("ADMIN", "NORMAL")
+                        .requestMatchers(HttpMethod.DELETE, "/api/campaigns/**").hasAnyRole("ADMIN", "NORMAL")
+                        .requestMatchers(HttpMethod.POST, "/api/donations/**").hasAnyRole("ADMIN", "NORMAL")
+                        .requestMatchers(HttpMethod.PATCH, "/api/users/**").hasAnyRole("ADMIN", "NORMAL")
+                        .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
