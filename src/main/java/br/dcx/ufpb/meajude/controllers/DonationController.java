@@ -5,6 +5,7 @@ import br.dcx.ufpb.meajude.dtos.donation.DonationGiverDTO;
 import br.dcx.ufpb.meajude.services.DonationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -24,9 +25,9 @@ public class DonationController {
 
     @PostMapping
     @Operation(summary = "Donate value", description = "Donating value", security = @SecurityRequirement(name = "bearerAuth"), tags = { "Donations" }, responses = {
-            @ApiResponse(responseCode = "200", description = "The donating was made"),
-            @ApiResponse(responseCode = "403", description = "User must be authenticated"),
-            @ApiResponse(responseCode = "400", description = "Incorrect parameters")
+            @ApiResponse(responseCode = "200", description = "The donating was made", content = @Content),
+            @ApiResponse(responseCode = "403", description = "User must be authenticated", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Incorrect parameters", content = @Content)
     })
     public ResponseEntity<DonationDTO> donationGiver(@RequestBody DonationGiverDTO donationGiverDTO, @Parameter(description = "Bearer Token Authorization", required = true, hidden = true, schema = @Schema(implementation = String.class)) @RequestHeader("Authorization") String header) {
         return new ResponseEntity<>(donationService.donationGiver(donationGiverDTO), HttpStatus.OK);
@@ -34,8 +35,8 @@ public class DonationController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Donations by id", description = "Returning donations by id", tags = { "Donations" }, responses = {
-            @ApiResponse(responseCode = "200", description = "Donations returned"),
-            @ApiResponse(responseCode = "404", description = "No donation was found")
+            @ApiResponse(responseCode = "200", description = "Donations returned", content = @Content),
+            @ApiResponse(responseCode = "404", description = "No donation was found", content = @Content)
     })
     public ResponseEntity<DonationDTO> returnDonation(@PathVariable String id) {
         return new ResponseEntity<>(donationService.returnDonation(id), HttpStatus.OK);
@@ -43,8 +44,8 @@ public class DonationController {
 
     @GetMapping("/all")
     @Operation(summary = "Get all donations", description = "Returning all donations", tags = { "Donations" }, responses = {
-            @ApiResponse(responseCode = "200", description = "All donations returned"),
-            @ApiResponse(responseCode = "404", description = "No donation was made")
+            @ApiResponse(responseCode = "200", description = "All donations returned", content = @Content),
+            @ApiResponse(responseCode = "404", description = "No donation was made", content = @Content)
     })
     public ResponseEntity<List<DonationDTO>> returnAllDonationList() {
         return new ResponseEntity<>(donationService.returnAllDonationList(), HttpStatus.OK);
@@ -52,8 +53,8 @@ public class DonationController {
 
     @GetMapping("/campaigns/{id}")
     @Operation(summary = "Donations by id", description = "Returning all campaign donations by id", tags = { "Donations" }, responses = {
-            @ApiResponse(responseCode = "200", description = "Donations returned"),
-            @ApiResponse(responseCode = "404", description = "No donation was found")
+            @ApiResponse(responseCode = "200", description = "Donations returned", content = @Content),
+            @ApiResponse(responseCode = "404", description = "No donation was found", content = @Content)
     })
     public ResponseEntity<List<DonationDTO>> returnCampaignDonationList(@PathVariable String id) {
         return new ResponseEntity<>(donationService.returnCampaignDonationList(id), HttpStatus.OK);

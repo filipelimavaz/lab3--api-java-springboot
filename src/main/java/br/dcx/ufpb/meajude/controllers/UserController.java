@@ -5,6 +5,7 @@ import br.dcx.ufpb.meajude.dtos.user.UserDTO;
 import br.dcx.ufpb.meajude.dtos.user.UserUpdateDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -29,8 +30,8 @@ public class UserController {
 
     @GetMapping("/{email}")
     @Operation(summary = "User by email", description = "Return user by email", tags = { "Users" }, responses = {
-            @ApiResponse(responseCode = "200", description = "User returned"),
-            @ApiResponse(responseCode = "404", description = "User not found")
+            @ApiResponse(responseCode = "200", description = "User returned", content = @Content),
+            @ApiResponse(responseCode = "404", description = "User not found", content = @Content)
 
     })
     public ResponseEntity<UserDTO> returnUser(@PathVariable String email) {
@@ -39,8 +40,8 @@ public class UserController {
 
     @GetMapping
     @Operation(summary = "User list", description = "Returning user list", tags = { "Users" }, responses = {
-            @ApiResponse(responseCode = "200", description = "User list returned"),
-            @ApiResponse(responseCode = "404", description = "No users were found")
+            @ApiResponse(responseCode = "200", description = "User list returned", content = @Content),
+            @ApiResponse(responseCode = "404", description = "No users were found", content = @Content)
     })
     public ResponseEntity<List<UserDTO>> returnUserList(){
         return new ResponseEntity<List<UserDTO>>(userService.returnUserList(), HttpStatus.OK);
@@ -48,9 +49,9 @@ public class UserController {
 
     @PatchMapping("/{email}")
     @Operation(summary = "Update user", description = "Updating user", security = @SecurityRequirement(name = "bearerAuth"), tags = { "Users" }, responses = {
-            @ApiResponse(responseCode = "200", description = "Information user updated"),
-            @ApiResponse(responseCode = "403", description = "User must be authenticated"),
-            @ApiResponse(responseCode = "400", description = "Incorrect parameters")
+            @ApiResponse(responseCode = "200", description = "Information user updated", content = @Content),
+            @ApiResponse(responseCode = "403", description = "User must be authenticated", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Incorrect parameters", content = @Content)
 
     })
     public ResponseEntity<UserDTO> updateUser(@PathVariable String email, @RequestBody UserUpdateDTO userUpdateDTO, @Parameter(description = "Bearer Token Authorization", required = true, hidden = true, schema = @Schema(implementation = String.class)) @RequestHeader("Authorization") String header) {
@@ -59,9 +60,9 @@ public class UserController {
 
     @PatchMapping("/delete/{email}")
     @Operation(summary = "Delete user", description = "Deleting user", security = @SecurityRequirement(name = "bearerAuth"), tags = { "Users" }, responses = {
-            @ApiResponse(responseCode = "200", description = "The user was deleted"),
-            @ApiResponse(responseCode = "403", description = "User must be authenticated"),
-            @ApiResponse(responseCode = "400", description = "Incorrect parameters")
+            @ApiResponse(responseCode = "200", description = "The user was deleted", content = @Content),
+            @ApiResponse(responseCode = "403", description = "User must be authenticated", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Incorrect parameters", content = @Content)
     })
     public ResponseEntity<UserDTO> deleteUser(@PathVariable String email, @Parameter(description = "Bearer Token Authorization", required = true, hidden = true, schema = @Schema(implementation = String.class)) @RequestHeader("Authorization") String header) {
         return new ResponseEntity<>(userService.deleteUser(email), HttpStatus. OK);

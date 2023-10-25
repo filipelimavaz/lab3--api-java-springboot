@@ -6,6 +6,7 @@ import br.dcx.ufpb.meajude.dtos.campaign.CampaignUpdateDTO;
 import br.dcx.ufpb.meajude.services.CampaignService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -25,9 +26,9 @@ public class CampaignController {
 
     @PostMapping("/create")
     @Operation(summary = "Crete a campaign", description = "Creating a campaign", security = @SecurityRequirement(name = "bearerAuth"), tags = { "Campaigns" }, responses = {
-            @ApiResponse(responseCode = "201", description = "Campaign created"),
-            @ApiResponse(responseCode = "400", description = "Incorrect parameters"),
-            @ApiResponse(responseCode = "403", description = "User must be authenticated")
+            @ApiResponse(responseCode = "201", description = "Campaign created", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Incorrect parameters", content = @Content),
+            @ApiResponse(responseCode = "403", description = "User must be authenticated", content = @Content)
 
     })
     public ResponseEntity<CampaignDTO> createCampaign(@RequestBody CampaignRegistrationDTO campaignRegistrationDTO, @Parameter(description = "Bearer Token Authorization", required = true, hidden = true, schema = @Schema(implementation = String.class)) @RequestHeader("Authorization") String header) {
@@ -36,8 +37,8 @@ public class CampaignController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Return a campaign by id", description = "Return a campaign by ID", tags = { "Campaigns"}, responses = {
-            @ApiResponse(responseCode = "200", description = "Campaign returned"),
-            @ApiResponse(responseCode = "404", description = "The campaign was not found")
+            @ApiResponse(responseCode = "200", description = "Campaign returned", content = @Content),
+            @ApiResponse(responseCode = "404", description = "The campaign was not found", content = @Content)
     })
     public ResponseEntity<CampaignDTO> returnCampaign(@PathVariable String id) {
         return new ResponseEntity<>(campaignService.returnCampaign(id), HttpStatus.OK);
@@ -45,8 +46,8 @@ public class CampaignController {
 
     @GetMapping("/active")
     @Operation(summary = "Return active campaigns", description = "Listing all active campaigns", tags = { "Campaigns" }, responses = {
-            @ApiResponse(responseCode = "200", description = "Campaign list returned"),
-            @ApiResponse(responseCode = "404", description = "No campaigns were found")
+            @ApiResponse(responseCode = "200", description = "Campaign list returned", content = @Content),
+            @ApiResponse(responseCode = "404", description = "No campaigns were found", content = @Content)
     })
     public ResponseEntity<List<CampaignDTO>> returnActiveCampaignList() {
         return new ResponseEntity<>(campaignService.returnActiveCampaignList(), HttpStatus.OK);
@@ -54,8 +55,8 @@ public class CampaignController {
 
     @GetMapping("/active_by_creationDate")
     @Operation(summary = "Active campaigns", description = "Return active campaigns ordered by creation date", tags = { "Campaigns" }, responses = {
-            @ApiResponse(responseCode = "200", description = "Active campaigns"),
-            @ApiResponse(responseCode = "404", description = "No campaigns were found")
+            @ApiResponse(responseCode = "200", description = "Active campaigns", content = @Content),
+            @ApiResponse(responseCode = "404", description = "No campaigns were found", content = @Content)
     })
     public ResponseEntity<List<CampaignDTO>> returnActiveCampaignsOrderedByCreationDate() {
         return new ResponseEntity<>(campaignService.returnActiveCampaignsOrderedByCreationDate(), HttpStatus.OK);
@@ -63,8 +64,8 @@ public class CampaignController {
 
     @GetMapping("/closed_by_creationDate")
     @Operation(summary = "Closed campaigns", description = "Return closed camapaigns ordered by creation date", tags = { "Campaigns" }, responses = {
-            @ApiResponse(responseCode = "200", description = "Active campaigns"),
-            @ApiResponse(responseCode = "404", description = "No campaigns were found")
+            @ApiResponse(responseCode = "200", description = "Active campaigns", content = @Content),
+            @ApiResponse(responseCode = "404", description = "No campaigns were found", content = @Content)
     })
     public ResponseEntity<List<CampaignDTO>> returnClosedCampaignsOrderedByCreationDate() {
         return new ResponseEntity<>(campaignService.returnActiveCampaignList(), HttpStatus.OK);
@@ -72,8 +73,8 @@ public class CampaignController {
 
     @GetMapping("/upcoming")
     @Operation(summary = "Upcoming campaign list", description = "Return the upcoming campaign list", tags = { "Campaigns" }, responses = {
-            @ApiResponse(responseCode = "200", description = "Upcoming campaigns"),
-            @ApiResponse(responseCode = "404", description = "No upcoming campaign was found")
+            @ApiResponse(responseCode = "200", description = "Upcoming campaigns", content = @Content),
+            @ApiResponse(responseCode = "404", description = "No upcoming campaign was found", content = @Content)
     })
     public ResponseEntity<List<CampaignDTO>> returnUpcomingCampaignList() {
         return new ResponseEntity<>(campaignService.returnUpcomingCampaignList(), HttpStatus.OK);
@@ -81,8 +82,8 @@ public class CampaignController {
 
     @GetMapping("/closed")
     @Operation(summary = "Closed campaigns", description = "Return closed campaigns", tags = { "Campaigns" }, responses = {
-            @ApiResponse(responseCode = "200", description = "Closed campaigns"),
-            @ApiResponse(responseCode = "404", description = "No closed campaign was found")
+            @ApiResponse(responseCode = "200", description = "Closed campaigns", content = @Content),
+            @ApiResponse(responseCode = "404", description = "No closed campaign was found", content = @Content)
     })
     public ResponseEntity<List<CampaignDTO>> returnClosedCampaignList() {
         return new ResponseEntity<>(campaignService.returnClosedCampaignList(), HttpStatus.OK);
@@ -90,8 +91,8 @@ public class CampaignController {
 
     @GetMapping("/user/{id}")
     @Operation(summary = "User campaign list", description = "Return all user campaign list", tags = { "Campaigns" }, responses = {
-            @ApiResponse(responseCode = "200", description = "User campaign list"),
-            @ApiResponse(responseCode = "404", description = "No campaign was found by this id")
+            @ApiResponse(responseCode = "200", description = "User campaign list", content = @Content),
+            @ApiResponse(responseCode = "404", description = "No campaign was found by this id", content = @Content)
     })
     public ResponseEntity<List<CampaignDTO>> returnAllUserCampaignList(@PathVariable String id) {
         return new ResponseEntity<>(campaignService.returnAllUserCampaignList(id), HttpStatus.OK);
@@ -99,8 +100,8 @@ public class CampaignController {
 
     @GetMapping("/all")
     @Operation(summary = "Campaign list", description = "Return campaign list", tags = { "Campaigns" }, responses = {
-            @ApiResponse(responseCode = "200", description = "Campaign list"),
-            @ApiResponse(responseCode = "404", description = "No campaign was found")
+            @ApiResponse(responseCode = "200", description = "Campaign list", content = @Content),
+            @ApiResponse(responseCode = "404", description = "No campaign was found", content = @Content)
     })
     public ResponseEntity<List<CampaignDTO>> returnAllCampaignList() {
         return new ResponseEntity<>(campaignService.returnAllCampaignList(), HttpStatus.OK);
@@ -108,9 +109,9 @@ public class CampaignController {
 
     @PatchMapping("/{id}")
     @Operation(summary = "Update campaign", description = "Updating campaign", security = @SecurityRequirement(name = "bearerAuth"), tags = { "Campaigns" }, responses = {
-            @ApiResponse(responseCode = "200", description = "Campaign updated"),
-            @ApiResponse(responseCode = "403", description = "User must be authenticated"),
-            @ApiResponse(responseCode = "404", description = "Incorrect parameters")
+            @ApiResponse(responseCode = "200", description = "Campaign updated", content = @Content),
+            @ApiResponse(responseCode = "403", description = "User must be authenticated", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Incorrect parameters", content = @Content)
 
     })
     public ResponseEntity<CampaignDTO> updateCampaign(@PathVariable String id, @RequestBody CampaignUpdateDTO campaignUpdateDTO, @Parameter(description = "Bearer Token Authorization", required = true, hidden = true, schema = @Schema(implementation = String.class)) @RequestHeader("Authorization") String header) {
@@ -119,9 +120,9 @@ public class CampaignController {
 
     @PatchMapping("/close/{id}")
     @Operation(summary = "Close campaign", description = "Closing campaign", security = @SecurityRequirement(name = "bearerAuth"), tags = { "Campaigns" }, responses = {
-            @ApiResponse(responseCode = "200", description = "The campaign was closed"),
-            @ApiResponse(responseCode = "403", description = "User must be authenticated"),
-            @ApiResponse(responseCode = "404", description = "Incorrect parameters")
+            @ApiResponse(responseCode = "200", description = "The campaign was closed", content = @Content),
+            @ApiResponse(responseCode = "403", description = "User must be authenticated", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Incorrect parameters", content = @Content)
     })
     public ResponseEntity<CampaignDTO> closeCampaign(@PathVariable String id, @Parameter(description = "Bearer Token Authorization", required = true, hidden = true, schema = @Schema(implementation = String.class)) @RequestHeader("Authorization") String header) {
         return new ResponseEntity<>(campaignService.closeCampaign(id), HttpStatus.OK);
@@ -129,10 +130,10 @@ public class CampaignController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete campaign", description = "Deleting campaign", security = @SecurityRequirement(name = "bearerAuth"), tags = { "Campaigns" }, responses = {
-            @ApiResponse(responseCode = "200", description = "The campaign was deleted"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized"),
-            @ApiResponse(responseCode = "403", description = "User must be authenticated"),
-            @ApiResponse(responseCode = "404", description = "Incorrect parameters")
+            @ApiResponse(responseCode = "200", description = "The campaign was deleted", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
+            @ApiResponse(responseCode = "403", description = "User must be authenticated", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Incorrect parameters", content = @Content)
     })
     public ResponseEntity<CampaignDTO> deleteCampaign(@PathVariable String id, @Parameter(description = "Bearer Token Authorization", required = true, hidden = true, schema = @Schema(implementation = String.class)) @RequestHeader("Authorization") String header) {
         return new ResponseEntity<>(campaignService.deleteCampaign(id), HttpStatus.OK);
